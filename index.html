@@ -19,7 +19,6 @@
     label { font-weight: 600; }
     input[type="number"] { background: #333; color: #FEFEF3; border: 1px solid #555; width: 100%; padding: .4rem; font-size: 1rem; border-radius: 6px; }
     input[disabled] { background: #444; color: #888; }
-    .price { font-size: .9rem; color: #444; }
     .sub { text-align: right; }
     button { cursor: pointer; border: none; border-radius: 8px; padding: .6rem 1rem; font-weight: 700; margin-top: .8rem; }
     .primary { background: #A82B2D; color: #FEFEF3; }
@@ -117,7 +116,9 @@
   <section class="card" id="recycling">
     <h2>Recycling materialen</h2>
     <div class="grid">
-      <div class="head">Item</div><div class="head">Aantal</div><div class="head">Prijs</div>    
+      <div class="head">Item</div>
+      <div class="head">Aantal</div>
+      <div class="head right">Prijs</div>
 
       <div><label for="telefoons">Gebroken telefoons</label><div class="price">€10 / stuk</div></div>
       <div><input id="telefoons" type="number" min="0" value="0"></div>
@@ -169,6 +170,23 @@ const parseEuro = (s) => {
   return parseFloat(String(s).replace(/\./g, '').replace(',', '.')) || 0;
 };
 
+// nette labels per ID
+const LABELS = {
+  ijzer: "Ijzer",
+  staal: "Staal",
+  aluminium: "Aluminium",
+  carparts: "Car parts",
+  metaalschroot: "Metaalschroot",
+  rubber: "Rubber",
+  plastic: "Plastic",
+  glas: "Glas",
+  koper: "Koper",
+  banden: "Versleten fietsbanden",
+  blikjes: "Lege blikjes",
+  telefoons: "Gebroken telefoons",
+  radios: "Gebroken radio's"
+};
+  
 // prijzen
 const PRICES = {
   aankoop: {
@@ -216,7 +234,13 @@ function renderRows(section,data){
   tbody.innerHTML="";
   data.forEach(([id,qty,price,sub])=>{
     const tr=document.createElement("tr");
-    tr.innerHTML=`<td>${id}</td><td class="right">${qty}</td><td class="right">€${euro(price)}</td><td class="right">€${euro(sub)}</td>`;
+    const label = LABELS[id] || id;
+    tr.innerHTML = `
+      <td>${label}</td>
+      <td class="right">${qty}</td>
+      <td class="right">€${euro(price)}</td>
+      <td class="right">€${euro(sub)}</td>
+    `;
     tbody.appendChild(tr);
   });
 }
