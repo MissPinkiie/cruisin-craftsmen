@@ -60,41 +60,41 @@
 
       <div><label for="aluminium">Aluminium</label><div class="price">€25 / stuk</div></div>
       <div><input id="aluminium" type="number" min="0" value="0"></div>
-      <div class="sub">€<span id="sub-aluminium">0,00</span></div>
+      <div class="sub">€<span id="sub-aluminium">0</span></div>
 
       <div><label for="carparts">Car parts</label><div class="price">€25 / stuk</div></div>
       <div><input id="carparts" type="number" min="0" value="0"></div>
-      <div class="sub">€<span id="sub-carparts">0,00</span></div>
+      <div class="sub">€<span id="sub-carparts">0</span></div>
       
       <div><label for="ijzer">Ijzer</label><div class="price">€20 / stuk</div></div>
       <div><input id="ijzer" type="number" min="0" value="0"></div>
-      <div class="sub">€<span id="sub-ijzer">0,00</span></div>
+      <div class="sub">€<span id="sub-ijzer">0</span></div>
 
       <div><label for="metaalschroot">Metaalschroot</label><div class="price">€25 / stuk</div></div>
       <div><input id="metaalschroot" type="number" min="0" value="0"></div>
-      <div class="sub">€<span id="sub-metaalschroot">0,00</span></div>
+      <div class="sub">€<span id="sub-metaalschroot">0</span></div>
 
       <div><label for="rubber">Rubber</label><div class="price">€25 / stuk</div></div>
       <div><input id="rubber" type="number" min="0" value="0"></div>
-      <div class="sub">€<span id="sub-rubber">0,00</span></div>
+      <div class="sub">€<span id="sub-rubber">0</span></div>
 
       <div><label for="staal">Staal</label><div class="price">€20 / stuk</div></div>
       <div><input id="staal" type="number" min="0" value="0"></div>
-      <div class="sub">€<span id="sub-staal">0,00</span></div>
+      <div class="sub">€<span id="sub-staal">0</span></div>
 
       <!-- €10 (restricted) -->
 
       <div><label for="glas">Glas</label><div class="price">€10 / stuk</div></div>
       <div><input id="glas" type="number" min="0" value="0" disabled></div>
-      <div class="sub">€<span id="sub-glas">0,00</span></div>
+      <div class="sub">€<span id="sub-glas">0</span></div>
 
       <div><label for="koper">Koper</label><div class="price">€10 / stuk</div></div>
       <div><input id="koper" type="number" min="0" value="0" disabled></div>
-      <div class="sub">€<span id="sub-koper">0,00</span></div>
+      <div class="sub">€<span id="sub-koper">0</span></div>
 
       <div><label for="plastic">Plastic</label><div class="price">€10 / stuk</div></div>
       <div><input id="plastic" type="number" min="0" value="0" disabled></div>
-      <div class="sub">€<span id="sub-plastic">0,00</span></div>
+      <div class="sub">€<span id="sub-plastic">0</span></div>
     </div>
 
     <button class="primary" id="btn-aankoop">Bereken aankoop</button>
@@ -102,7 +102,7 @@
 
     <div class="results" id="res-aankoop" hidden>
       <div class="totals">
-        <div class="pill"><div class="label">Subtotaal aankoop</div><div class="value">€ <span id="sum-aankoop">0,00</span></div></div>
+        <div class="pill"><div class="label">Subtotaal aankoop</div><div class="value">€ <span id="sum-aankoop">0</span></div></div>
         <div class="pill"><div class="label">Aantal items</div><div class="value"><span id="cnt-aankoop">0</span></div></div>
       </div>
       <table>
@@ -122,19 +122,19 @@
 
       <div><label for="telefoons">Gebroken telefoons</label><div class="price">€10 / stuk</div></div>
       <div><input id="telefoons" type="number" min="0" value="0"></div>
-      <div class="sub">€<span id="sub-telefoons">0,00</span></div>
+      <div class="sub">€<span id="sub-telefoons">0</span></div>
 
       <div><label for="radios">Gebroken radio's</label><div class="price">€10 / stuk</div></div>
       <div><input id="radios" type="number" min="0" value="0"></div>
-      <div class="sub">€<span id="sub-radios">0,00</span></div>
+      <div class="sub">€<span id="sub-radios">0</span></div>
 
       <div><label for="blikjes">Lege blikjes</label><div class="price">€10 / stuk</div></div>
       <div><input id="blikjes" type="number" min="0" value="0"></div>
-      <div class="sub">€<span id="sub-blikjes">0,00</span></div>
+      <div class="sub">€<span id="sub-blikjes">0</span></div>
 
       <div><label for="banden">Versleten fietsbanden</label><div class="price">€10 / stuk</div></div>
       <div><input id="banden" type="number" min="0" value="0"></div>
-      <div class="sub">€<span id="sub-banden">0,00</span></div>
+      <div class="sub">€<span id="sub-banden">0</span></div>
     </div>
 
     <button class="primary" id="btn-recycling">Bereken recycling</button>
@@ -142,7 +142,7 @@
 
     <div class="results" id="res-recycling" hidden>
       <div class="totals">
-        <div class="pill"><div class="label">Subtotaal recycling</div><div class="value">€ <span id="sum-recycling">0,00</span></div></div>
+        <div class="pill"><div class="label">Subtotaal recycling</div><div class="value">€ <span id="sum-recycling">0</span></div></div>
         <div class="pill"><div class="label">Aantal items</div><div class="value"><span id="cnt-recycling">0</span></div></div>
       </div>
       <table>
@@ -156,7 +156,7 @@
   <section class="card">
     <h2>Totaal</h2>
     <div class="totals">
-      <div class="pill"><div class="label">Bedrag totaal</div><div class="value">€ <span id="sum-total">0,00</span></div></div>
+      <div class="pill"><div class="label">Bedrag totaal</div><div class="value">€ <span id="sum-total">0</span></div></div>
       <div class="pill"><div class="label">Aantal totaal</div><div class="value"><span id="cnt-total">0</span></div></div>
     </div>
   </section>
@@ -204,7 +204,7 @@ approveExtra.addEventListener('change',()=>{
   restrictedIds.forEach(id=>{
     const input=document.getElementById(id);
     input.disabled=!approveExtra.checked;
-    if(!approveExtra.checked){input.value=0; document.getElementById(`sub-${id}`).textContent="0,00";}
+    if(!approveExtra.checked){input.value=0; document.getElementById(`sub-${id}`).textContent="0";}
   });
 });
 
@@ -216,7 +216,7 @@ function compute(section){
     if(!input) continue;
     // restricted check
     if(restrictedIds.includes(id) && !approveExtra.checked){
-      document.getElementById(`sub-${id}`).textContent="0,00";
+      document.getElementById(`sub-${id}`).textContent="0";
       continue;
     }
     const qty=parseInt(input.value)||0;
@@ -256,7 +256,7 @@ document.getElementById('btn-aankoop').onclick=()=>{
 };
 document.getElementById('btn-reset-aankoop').onclick=()=>{
   Object.keys(PRICES.aankoop).forEach(id=>{
-    const input=document.getElementById(id); if(input){input.value=0; document.getElementById(`sub-${id}`).textContent="0,00";}
+    const input=document.getElementById(id); if(input){input.value=0; document.getElementById(`sub-${id}`).textContent="0";}
   });
   approveExtra.checked=false; restrictedIds.forEach(id=>document.getElementById(id).disabled=true);
   document.getElementById('res-aankoop').hidden=true; updateTotal();
@@ -273,7 +273,7 @@ document.getElementById('btn-recycling').onclick=()=>{
 };
 document.getElementById('btn-reset-recycling').onclick=()=>{
   Object.keys(PRICES.recycling).forEach(id=>{
-    const input=document.getElementById(id); if(input){input.value=0; document.getElementById(`sub-${id}`).textContent="0,00";}
+    const input=document.getElementById(id); if(input){input.value=0; document.getElementById(`sub-${id}`).textContent="0";}
   });
   document.getElementById('res-recycling').hidden=true; updateTotal();
 };
