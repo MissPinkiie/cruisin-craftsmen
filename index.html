@@ -49,7 +49,9 @@
     </p>
 
     <div class="grid">
-      <div class="head">Item</div><div class="head">Aantal</div><div class="head">Prijs</div>
+  <div class="head">Item</div>
+  <div class="head">Aantal</div>
+  <div class="head right">Prijs</div>
 
       <!-- €20 -->
       <div><label for="ijzer">Ijzer</label><div class="price">€20 / stuk</div></div>
@@ -156,6 +158,11 @@
 
 <script>
 const euro = n => (n||0).toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2});
+const parseEuro = (s) => {
+  if (!s) return 0;
+  // verwijder duizendtallen (.) en zet decimaal (,) naar punt
+  return parseFloat(String(s).replace(/\./g, '').replace(',', '.')) || 0;
+};
 
 // prijzen
 const PRICES = {
@@ -244,13 +251,16 @@ document.getElementById('btn-reset-recycling').onclick=()=>{
 
 // totaal
 function updateTotal(){
-  const a=parseFloat(document.getElementById('sum-aankoop').textContent.replace(',','.'))||0;
-  const r=parseFloat(document.getElementById('sum-recycling').textContent.replace(',','.'))||0;
-  const ca=parseInt(document.getElementById('cnt-aankoop').textContent)||0;
-  const cr=parseInt(document.getElementById('cnt-recycling').textContent)||0;
-  document.getElementById('sum-total').textContent=euro(a+r);
-  document.getElementById('cnt-total').textContent=ca+cr;
+  const a = parseEuro(document.getElementById('sum-aankoop').textContent);
+  const r = parseEuro(document.getElementById('sum-recycling').textContent);
+
+  const ca = parseInt(document.getElementById('cnt-aankoop').textContent || "0", 10) || 0;
+  const cr = parseInt(document.getElementById('cnt-recycling').textContent || "0", 10) || 0;
+
+  document.getElementById('sum-total').textContent = euro(a + r);
+  document.getElementById('cnt-total').textContent = (ca + cr).toString();
 }
+
 </script>
 </body>
 </html>
