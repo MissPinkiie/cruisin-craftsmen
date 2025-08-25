@@ -331,9 +331,52 @@ function updateTotal(){
   
 
 // Kopieer bericht
+const messages = [
+`🚗🔧 Cruisin Craftsmen Mechanic  
+Inkoop materialen. Wij danken u hartelijk voor uw bijdrage. 🙏✨`,
+
+`🚗🔧 Cruisin Craftsmen Mechanic  
+Bedankt voor het leveren van materialen! 🙌💪  
+Uw bijdrage houdt de garage draaiende 🔧🔥`,
+
+`🚗🔧 Cruisin Craftsmen Mechanic  
+Jouw materialen zijn geld waard 💰  
+Bedankt voor je bijdrage, wij sleutelen verder 🚗💨`,
+
+`🚗🔧 Cruisin Craftsmen Mechanic  
+Materials in, engines on! 🔧🔥  
+Thanks voor je bijdrage, legend 🙌`,
+
+`🚗🔧 Cruisin Craftsmen Mechanic  
+Met jouw bijdrage loopt de garage gesmeerd 🛠️⚙️  
+Dank voor het vertrouwen! 🙏`,
+
+`🚗🔧 Cruisin Craftsmen Mechanic  
+Topdeal gedaan ✅  
+Bedankt voor het materiaal en tot de volgende keer! 🔧🚙`,
+
+`🚗🔧 Cruisin Craftsmen Mechanic  
+Zonder jouw materialen geen horsepower ⚡🚗  
+Bedankt voor je bijdrage, topper! 🔧🔥`,
+
+`🚗🔧 Cruisin Craftsmen Mechanic  
+Materialen ontvangen 📦  
+Wij waarderen jouw steun enorm 🙏✨`,
+
+`🚗🔧 Cruisin Craftsmen Mechanic  
+Met jouw materiaal kunnen we weer kilometers maken 🚙💨  
+Thanks voor je bijdrage, legend! 🔧🔥`,
+
+`🚗🔧 Cruisin Craftsmen Mechanic  
+Bedankt voor het aanleveren van onderdelen 🔩⚙️  
+Samen houden we de stad rijdend 🚗✨`
+];
+
 document.getElementById('btn-copy-message').onclick = () => {
-  const tekst = "🚗🔧 Cruisin' Craftsmen Mechanics -- Inkoop materialen. Wij danken u voor uw bijdrage. 🙏✨";
-  navigator.clipboard.writeText(tekst).then(() => {
+  // random index kiezen
+  const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+  
+  navigator.clipboard.writeText(randomMsg).then(() => {
     const msg = document.getElementById('msg-copied');
     msg.classList.add('show');
     setTimeout(() => msg.classList.remove('show'), 1500);
