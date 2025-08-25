@@ -163,6 +163,12 @@
       <div class="pill"><div class="label">Bedrag totaal</div><div class="value">€ <span id="sum-total">0</span></div></div>
       <div class="pill"><div class="label">Aantal totaal</div><div class="value"><span id="cnt-total">0</span></div></div>
     </div>
+    <button class="ghost" id="btn-copy-total">📋 Kopieer totaal</button>
+    <small id="copy-msg" style="display:none; color:#ffcc00; margin-left:0.5rem;">
+      Gekopieerd!
+    </small>
+    <button class="ghost" id="btn-reset-all">Reset alles</button>
+    
   </section>
 </div>
 
@@ -294,6 +300,35 @@ function updateTotal(){
   document.getElementById('sum-total').textContent = euro(a + r);
   document.getElementById('cnt-total').textContent = (ca + cr).toString();
 }
+
+  document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (document.activeElement.closest('#aankoop')) {
+      document.getElementById('btn-aankoop').click();
+    } else if (document.activeElement.closest('#recycling')) {
+      document.getElementById('btn-recycling').click();
+    }
+  }
+});
+
+  document.getElementById('btn-reset-all').onclick = () => {
+  document.getElementById('btn-reset-aankoop').click();
+  document.getElementById('btn-reset-recycling').click();
+};
+
+  // Copy-to-clipboard voor totaal
+document.getElementById('btn-copy-total').onclick = () => {
+  const bedrag = document.getElementById('sum-total').textContent.trim();
+  const aantal = document.getElementById('cnt-total').textContent.trim();
+  const tekst = `€ ${bedrag} – ${aantal} items`;
+  
+  navigator.clipboard.writeText(tekst).then(() => {
+    const msg = document.getElementById('copy-msg');
+    msg.style.display = 'inline';
+    setTimeout(() => msg.style.display = 'none', 1500);
+  });
+};
+
 
 </script>
 </body>
