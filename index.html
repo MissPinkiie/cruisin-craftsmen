@@ -35,18 +35,8 @@
     th { background: #333; color: #FEFEF3; text-align: left; }
     .right { text-align: right; }
     .switch { margin: .5rem 0; font-size: .9rem; }
-
-    /* Fade effect voor gekopieerd melding */
-    #copy-msg {
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      color: #ffcc00;
-      font-size: .85rem;
-      margin-left: .5rem;
-    }
-    #copy-msg.show {
-      opacity: 1;
-    }
+    .fade-msg { opacity: 0; transition: opacity 0.4s ease; color: #ffcc00; font-size: .85rem; margin-left: .5rem; }
+    .fade-msg.show { opacity: 1; }
   </style>
 </head>
 <body>
@@ -170,16 +160,23 @@
 
   <!-- Algemeen totaal -->
  <section class="card">
-    <h2>Totaal</h2>
-    <div class="totals">
-      <div class="pill"><div class="label">Bedrag totaal</div><div class="value">€ <span id="sum-total">0</span></div></div>
-      <div class="pill"><div class="label">Aantal totaal</div><div class="value"><span id="cnt-total">0</span></div></div>
-    </div>
-    <button class="ghost" id="btn-copy-total">📋 Kopieer totaal</button>
-    <small id="copy-msg">Gekopieerd!</small>
-    <br>
-    <button class="ghost" id="btn-reset-all">Reset alles</button>
-  </section>
+  <h2>Totaal</h2>
+  <div class="totals">
+    <div class="pill"><div class="label">Bedrag totaal</div><div class="value">€ <span id="sum-total">0</span></div></div>
+    <div class="pill"><div class="label">Aantal totaal</div><div class="value"><span id="cnt-total">0</span></div></div>
+  </div>
+
+  <button class="ghost" id="btn-copy-message">📋 Kopieer bericht naar klant</button>
+  <small id="msg-copied" class="fade-msg">Bericht gekopieerd!</small>
+  <br>
+
+  <button class="ghost" id="btn-copy-total">📋 Kopieer totaal om klant uit te betalen</button>
+  <small id="copy-msg" class="fade-msg">Totaal gekopieerd!</small>
+  <br>
+
+  <button class="ghost" id="btn-reset-all">🔄 Reset alles</button>
+</section>
+
 </div>
 
 <script>
@@ -326,12 +323,27 @@ function updateTotal(){
   document.getElementById('btn-reset-recycling').click();
 };
 
-// Copy-to-clipboard met fade-in/out melding
+<button class="ghost" id="btn-copy-message">📋 Kopieer bericht</button>
+<small id="msg-copied" style="display:none; color:#ffcc00; margin-left:0.5rem;">
+  Bericht gekopieerd!
+</small>
+
+  
+
+// Kopieer bericht
+document.getElementById('btn-copy-message').onclick = () => {
+  const tekst = "🚗🔧 Cruisin' Craftsmen Mechanics -- Inkoop materialen. Wij danken u voor uw bijdrage. 🙏✨";
+  navigator.clipboard.writeText(tekst).then(() => {
+    const msg = document.getElementById('msg-copied');
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 1500);
+  });
+};
+
+// Kopieer totaal (zonder puntjes)
 document.getElementById('btn-copy-total').onclick = () => {
   const bedrag = document.getElementById('sum-total').textContent.trim();
-  // haal puntjes eruit
-  const clean = bedrag.replace(/\./g, '');
-  
+  const clean = bedrag.replace(/\./g, ''); // haal puntjes weg
   navigator.clipboard.writeText(clean).then(() => {
     const msg = document.getElementById('copy-msg');
     msg.classList.add('show');
