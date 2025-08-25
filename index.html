@@ -163,7 +163,7 @@
 </div>
 
 <script>
-const euro = n => (n||0).toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2});
+const euro = n => (n||0).toLocaleString('nl-NL',{minimumFractionDigits:0,maximumFractionDigits:0});
 const parseEuro = (s) => {
   if (!s) return 0;
   // verwijder duizendtallen (.) en zet decimaal (,) naar punt
