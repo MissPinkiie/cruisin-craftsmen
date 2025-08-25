@@ -65,6 +65,10 @@
       <div><label for="carparts">Car parts</label><div class="price">€25 / stuk</div></div>
       <div><input id="carparts" type="number" min="0" value="0"></div>
       <div class="sub">€<span id="sub-carparts">0</span></div>
+
+      <div><label for="craftparts">Craft parts</label><div class="price">€25 / stuk</div></div>
+      <div><input id="craftparts" type="number" min="0" value="0"></div>
+      <div class="sub">€<span id="sub-craftparts">0</span></div>
       
       <div><label for="ijzer">Ijzer</label><div class="price">€20 / stuk</div></div>
       <div><input id="ijzer" type="number" min="0" value="0"></div>
@@ -176,6 +180,7 @@ const LABELS = {
   staal: "Staal",
   aluminium: "Aluminium",
   carparts: "Car parts",
+  craftparts: "Craft parts",
   metaalschroot: "Metaalschroot",
   rubber: "Rubber",
   plastic: "Plastic",
@@ -191,7 +196,7 @@ const LABELS = {
 const PRICES = {
   aankoop: {
     ijzer:20, staal:20,
-    aluminium:25, carparts:25, metaalschroot:25, rubber:25,
+    aluminium:25, carparts:25, metaalschroot:25, rubber:25, craftparts:25,
     plastic:10, glas:10, koper:10
   },
   recycling: { banden:10, blikjes:10, telefoons:10, radios:10 }
