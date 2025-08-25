@@ -78,4 +78,364 @@
           <label for="ijzer">Ijzer</label>
           <div class="price">€20 / stuk</div>
         </div>
+        <div><input id="ijzer" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-ijzer">0,00</span></div>
+      </div>
 
+      <div class="row">
+        <div>
+          <label for="staal">Staal</label>
+          <div class="price">€20 / stuk</div>
+        </div>
+        <div><input id="staal" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-staal">0,00</span></div>
+      </div>
+
+      <!-- €25 -->
+      <div class="row">
+        <div>
+          <label for="aluminium">Aluminium</label>
+          <div class="price">€25 / stuk</div>
+        </div>
+        <div><input id="aluminium" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-aluminium">0,00</span></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="carparts">Car parts</label>
+          <div class="price">€25 / stuk</div>
+        </div>
+        <div><input id="carparts" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-carparts">0,00</span></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="metaalschroot">Metaalschroot</label>
+          <div class="price">€25 / stuk</div>
+        </div>
+        <div><input id="metaalschroot" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-metaalschroot">0,00</span></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="rubber">Rubber</label>
+          <div class="price">€25 / stuk</div>
+        </div>
+        <div><input id="rubber" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-rubber">0,00</span></div>
+      </div>
+
+      <!-- €10 -->
+      <div class="row">
+        <div>
+          <label for="plastic">Plastic</label>
+          <div class="price">€10 / stuk</div>
+        </div>
+        <div><input id="plastic" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-plastic">0,00</span></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="glas">Glas</label>
+          <div class="price">€10 / stuk</div>
+        </div>
+        <div><input id="glas" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-glas">0,00</span></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="koper">Koper <span class="hint">(alleen met manager-goedkeuring)</span></label>
+          <div class="price">€10 / stuk</div>
+          <label class="switch">
+            <input type="checkbox" id="approve-koper">
+            <span>Manager-goedkeuring voor koper</span>
+          </label>
+        </div>
+        <div><input id="koper" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*" disabled aria-describedby="koper-note"></div>
+        <div class="sub right">€<span id="sub-koper">0,00</span></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="primary" id="btn-aankoop">Bereken aankoop</button>
+      <button class="ghost" id="btn-reset-aankoop" type="button">Reset aankoop</button>
+    </div>
+
+    <div class="results" id="res-aankoop" hidden>
+      <div class="totals">
+        <div class="pill">
+          <div class="label">Subtotaal aankoop</div>
+          <div class="value">€ <span id="sum-aankoop">0,00</span></div>
+        </div>
+        <div class="pill">
+          <div class="label">Totaal items (aantal)</div>
+          <div class="value"><span id="cnt-aankoop">0</span></div>
+        </div>
+      </div>
+
+      <div>
+        <table id="breakdown-aankoop">
+          <thead>
+          <tr><th>Item</th><th class="right">Aantal</th><th class="right">Prijs/stuk</th><th class="right">Subtotaal</th></tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot>
+          <tr><td colspan="3" class="right">Subtotaal aankoop</td><td class="right">€ <span id="tfoot-aankoop">0,00</span></td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sectie 2: Recycling -->
+  <section class="card" id="recycling">
+    <h2>Recycling van materialen</h2>
+    <p class="hint">Vaste prijs voor elk item hieronder: €10 per stuk.</p>
+
+    <div class="grid" role="table" aria-label="Recycling materialen">
+      <div class="head">Item</div>
+      <div class="head">Aantal</div>
+      <div class="head">Prijs</div>
+
+      <div class="row">
+        <div>
+          <label for="versleten-fietsbanden">Versleten fietsbanden</label>
+          <div class="price">€10 / stuk</div>
+        </div>
+        <div><input id="versleten-fietsbanden" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-versleten-fietsbanden">0,00</span></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="lege-blikjes">Lege blikjes</label>
+          <div class="price">€10 / stuk</div>
+        </div>
+        <div><input id="lege-blikjes" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-lege-blikjes">0,00</span></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="gebroken-telefoons">Gebroken telefoons</label>
+          <div class="price">€10 / stuk</div>
+        </div>
+        <div><input id="gebroken-telefoons" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-gebroken-telefoons">0,00</span></div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="gebroken-radios">Gebroken radio's</label>
+          <div class="price">€10 / stuk</div>
+        </div>
+        <div><input id="gebroken-radios" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div class="sub right">€<span id="sub-gebroken-radios">0,00</span></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="primary" id="btn-recycling">Bereken recycling</button>
+      <button class="ghost" id="btn-reset-recycling" type="button">Reset recycling</button>
+    </div>
+
+    <div class="results" id="res-recycling" hidden>
+      <div class="totals">
+        <div class="pill">
+          <div class="label">Subtotaal recycling</div>
+          <div class="value">€ <span id="sum-recycling">0,00</span></div>
+        </div>
+        <div class="pill">
+          <div class="label">Totaal items (aantal)</div>
+          <div class="value"><span id="cnt-recycling">0</span></div>
+        </div>
+      </div>
+
+      <div>
+        <table id="breakdown-recycling">
+          <thead>
+          <tr><th>Item</th><th class="right">Aantal</th><th class="right">Prijs/stuk</th><th class="right">Subtotaal</th></tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot>
+          <tr><td colspan="3" class="right">Subtotaal recycling</td><td class="right">€ <span id="tfoot-recycling">0,00</span></td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOTAAL -->
+  <section class="card">
+    <h2>Algemeen totaal</h2>
+    <p class="hint">Som van aankoop + recycling na het klikken op beide bereken-knoppen.</p>
+    <div class="totals">
+      <div class="pill">
+        <div class="label">Totaal bedrag</div>
+        <div class="value">€ <span id="sum-total">0,00</span></div>
+      </div>
+      <div class="pill">
+        <div class="label">Totaal aantal items</div>
+        <div class="value"><span id="cnt-total">0</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // ---- helpers ----
+  const euro = n => (n || 0).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  // Items & prijzen
+  const PRICES = {
+    aankoop: {
+      "ijzer": 20, "staal": 20,
+      "aluminium": 25, "carparts": 25, "metaalschroot": 25, "rubber": 25,
+      "plastic": 10, "glas": 10, "koper": 10 // koper apart geregeld met approval
+    },
+    recycling: {
+      "versleten-fietsbanden": 10, "lege-blikjes": 10, "gebroken-telefoons": 10, "gebroken-radios": 10
+    }
+  };
+
+  // Koper-approval toggle
+  const approveKoper = document.getElementById('approve-koper');
+  const koperInput   = document.getElementById('koper');
+  approveKoper.addEventListener('change', () => {
+    koperInput.disabled = !approveKoper.checked;
+    if (!approveKoper.checked) { koperInput.value = 0; document.getElementById('sub-koper').textContent = "0,00"; }
+  });
+
+  // Subtotal updater (per rij) om direct feedback te geven zodra er berekend wordt
+  function computeSection(sectionKey) {
+    const prices = PRICES[sectionKey];
+    let sum = 0, count = 0;
+    const rows = [];
+
+    for (const id in prices) {
+      const input = document.getElementById(id);
+      if (!input) continue;
+
+      // Als koper niet is goedgekeurd, telt het niet mee (en is disabled)
+      if (id === "koper" && koperInput.disabled) {
+        document.getElementById('sub-koper').textContent = "0,00";
+        continue;
+      }
+
+      const qty = Math.max(0, parseInt(input.value || "0", 10));
+      const sub = qty * prices[id];
+      sum += sub; count += qty;
+
+      // Update per-rij subtotaal
+      const subEl = document.getElementById(`sub-${id}`);
+      if (subEl) subEl.textContent = euro(sub);
+
+      if (qty > 0) {
+        // label-tekst netjes terughalen
+        const labelText = document.querySelector(`label[for="${id}"]`)?.innerText || id;
+        rows.push([labelText, qty, prices[id], sub]);
+      }
+    }
+    return { sum, count, rows };
+  }
+
+  function renderTable(tableId, rows, sum, sumCellId) {
+    const tbody = document.querySelector(`#${tableId} tbody`);
+    tbody.innerHTML = "";
+    if (rows.length === 0) {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 4;
+      td.textContent = "Geen items geselecteerd.";
+      td.style.color = '#6b7280';
+      tbody.appendChild(tr).appendChild(td);
+    } else {
+      rows.forEach(([name, qty, price, sub]) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${name}</td>
+                        <td class="right">${qty}</td>
+                        <td class="right">€ ${euro(price)}</td>
+                        <td class="right">€ ${euro(sub)}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+    document.getElementById(sumCellId).textContent = euro(sum);
+  }
+
+  // Aankoop
+  document.getElementById('btn-aankoop').addEventListener('click', () => {
+    const { sum, count, rows } = computeSection('aankoop');
+    document.getElementById('sum-aankoop').textContent = euro(sum);
+    document.getElementById('cnt-aankoop').textContent = count;
+    renderTable('breakdown-aankoop', rows, sum, 'tfoot-aankoop');
+    document.getElementById('res-aankoop').hidden = false;
+    updateGrandTotal();
+  });
+
+  document.getElementById('btn-reset-aankoop').addEventListener('click', () => {
+    for (const id in PRICES.aankoop) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      el.value = 0;
+      const subEl = document.getElementById(`sub-${id}`);
+      if (subEl) subEl.textContent = "0,00";
+    }
+    approveKoper.checked = false;
+    koperInput.disabled = true;
+    document.getElementById('res-aankoop').hidden = true;
+    updateGrandTotal();
+  });
+
+  // Recycling
+  document.getElementById('btn-recycling').addEventListener('click', () => {
+    const { sum, count, rows } = computeSection('recycling');
+    document.getElementById('sum-recycling').textContent = euro(sum);
+    document.getElementById('cnt-recycling').textContent = count;
+    renderTable('breakdown-recycling', rows, sum, 'tfoot-recycling');
+    document.getElementById('res-recycling').hidden = false;
+    updateGrandTotal();
+  });
+
+  document.getElementById('btn-reset-recycling').addEventListener('click', () => {
+    for (const id in PRICES.recycling) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      el.value = 0;
+      const subEl = document.getElementById(`sub-${id}`);
+      if (subEl) subEl.textContent = "0,00";
+    }
+    document.getElementById('res-recycling').hidden = true;
+    updateGrandTotal();
+  });
+
+  // Totaal (som van beide secties nadat die berekend zijn)
+  function updateGrandTotal(){
+    const aankoop = parseFloat((document.getElementById('sum-aankoop').textContent || "0").replace('.', '').replace(',', '.')) || 0;
+    const recycling = parseFloat((document.getElementById('sum-recycling').textContent || "0").replace('.', '').replace(',', '.')) || 0;
+
+    const cntA = parseInt(document.getElementById('cnt-aankoop').textContent || "0", 10) || 0;
+    const cntR = parseInt(document.getElementById('cnt-recycling').textContent || "0", 10) || 0;
+
+    document.getElementById('sum-total').textContent = euro(aankoop + recycling);
+    document.getElementById('cnt-total').textContent = (cntA + cntR).toString();
+  }
+
+  // Enter activeert berekenen in de dichtstbijzijnde sectie
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const active = document.activeElement;
+      if (active && document.getElementById('aankoop').contains(active)) {
+        document.getElementById('btn-aankoop').click();
+      } else if (active && document.getElementById('recycling').contains(active)) {
+        document.getElementById('btn-recycling').click();
+      }
+    }
+  });
+</script>
+</body>
+</html>
