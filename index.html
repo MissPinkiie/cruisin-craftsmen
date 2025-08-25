@@ -41,7 +41,7 @@
 </head>
 <body>
 <header>
-  <img src="logo.png" alt="Cruisin' Craftsmen" class="logo">
+  <img src="logo.png" alt="Cruisin Craftsmen" class="logo">
   <h1>Inkoop & Recycling — Berekentool</h1>
   <p>Vul aantallen in per item en klik op <b>Bereken</b>. Alle prijzen in EUR per stuk.</p>
 </header>
@@ -56,9 +56,9 @@
     </p>
 
     <div class="grid">
-  <div class="head">Item</div>
-  <div class="head">Aantal</div>
-  <div class="head right">Prijs</div>
+      <div class="head">Item</div>
+      <div class="head">Aantal</div>
+      <div class="head right">Prijs</div>
 
       <div><label for="aluminium">Aluminium</label><div class="price">€25 / stuk</div></div>
       <div><input id="aluminium" type="number" min="0" value="0"></div>
@@ -159,23 +159,23 @@
   </section>
 
   <!-- Algemeen totaal -->
- <section class="card">
-  <h2>Totaal</h2>
-  <div class="totals">
-    <div class="pill"><div class="label">Bedrag totaal</div><div class="value">€ <span id="sum-total">0</span></div></div>
-    <div class="pill"><div class="label">Aantal totaal</div><div class="value"><span id="cnt-total">0</span></div></div>
-  </div>
+  <section class="card">
+    <h2>Totaal</h2>
+    <div class="totals">
+      <div class="pill"><div class="label">Bedrag totaal</div><div class="value">€ <span id="sum-total">0</span></div></div>
+      <div class="pill"><div class="label">Aantal totaal</div><div class="value"><span id="cnt-total">0</span></div></div>
+    </div>
 
-  <button class="ghost" id="btn-copy-message">📋 Kopieer bericht naar klant</button>
-  <small id="msg-copied" class="fade-msg">Bericht gekopieerd!</small>
-  <br>
+    <button class="ghost" id="btn-copy-message">📋 Kopieer bericht naar klant</button>
+    <small id="msg-copied" class="fade-msg">Bericht gekopieerd!</small>
+    <br>
 
-  <button class="ghost" id="btn-copy-total">📋 Kopieer totaal om klant uit te betalen</button>
-  <small id="copy-msg" class="fade-msg">Totaal gekopieerd!</small>
-  <br>
+    <button class="ghost" id="btn-copy-total">📋 Kopieer totaal om klant uit te betalen</button>
+    <small id="copy-msg" class="fade-msg">Totaal gekopieerd!</small>
+    <br>
 
-  <button class="ghost" id="btn-reset-all">🔄 Reset alles</button>
-</section>
+    <button class="ghost" id="btn-reset-all">🔄 Reset alles</button>
+  </section>
 
 </div>
 
@@ -186,7 +186,6 @@ const parseEuro = (s) => {
   return parseFloat(String(s).replace(/\./g, '').replace(',', '.')) || 0;
 };
 
-  
 // nette labels per ID
 const LABELS = {
   ijzer: "Ijzer",
@@ -232,7 +231,6 @@ function compute(section){
   for(const id in prices){
     const input=document.getElementById(id);
     if(!input) continue;
-    // restricted check
     if(restrictedIds.includes(id) && !approveExtra.checked){
       document.getElementById(`sub-${id}`).textContent="0";
       continue;
@@ -308,7 +306,8 @@ function updateTotal(){
   document.getElementById('cnt-total').textContent = (ca + cr).toString();
 }
 
-  document.addEventListener('keydown', e => {
+// enter-to-bereken
+document.addEventListener('keydown', e => {
   if (e.key === 'Enter') {
     if (document.activeElement.closest('#aankoop')) {
       document.getElementById('btn-aankoop').click();
@@ -318,19 +317,13 @@ function updateTotal(){
   }
 });
 
-  document.getElementById('btn-reset-all').onclick = () => {
+// reset alles
+document.getElementById('btn-reset-all').onclick = () => {
   document.getElementById('btn-reset-aankoop').click();
   document.getElementById('btn-reset-recycling').click();
 };
 
-<button class="ghost" id="btn-copy-message">📋 Kopieer bericht</button>
-<small id="msg-copied" style="display:none; color:#ffcc00; margin-left:0.5rem;">
-  Bericht gekopieerd!
-</small>
-
-  
-
-// Kopieer bericht
+// Kopieer bericht (random variant)
 const messages = [
 `🚗🔧 Cruisin Craftsmen Mechanic  
 Inkoop materialen. Wij danken u hartelijk voor uw bijdrage. 🙏✨`,
@@ -373,9 +366,7 @@ Samen houden we de stad rijdend 🚗✨`
 ];
 
 document.getElementById('btn-copy-message').onclick = () => {
-  // random index kiezen
   const randomMsg = messages[Math.floor(Math.random() * messages.length)];
-  
   navigator.clipboard.writeText(randomMsg).then(() => {
     const msg = document.getElementById('msg-copied');
     msg.classList.add('show');
@@ -386,15 +377,13 @@ document.getElementById('btn-copy-message').onclick = () => {
 // Kopieer totaal (zonder puntjes)
 document.getElementById('btn-copy-total').onclick = () => {
   const bedrag = document.getElementById('sum-total').textContent.trim();
-  const clean = bedrag.replace(/\./g, ''); // haal puntjes weg
+  const clean = bedrag.replace(/\./g, ''); // puntjes weg
   navigator.clipboard.writeText(clean).then(() => {
     const msg = document.getElementById('copy-msg');
     msg.classList.add('show');
     setTimeout(() => msg.classList.remove('show'), 1500);
   });
 };
-
-
 </script>
 </body>
 </html>
