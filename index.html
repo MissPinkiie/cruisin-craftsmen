@@ -65,7 +65,7 @@
   <section class="card" id="aankoop">
     <h2>Aankoop materialen</h2>
     <p class="hint">Vaste prijzen: ijzer/staal €20 • aluminium/car parts/metaalschroot/rubber €25 • plastic/glas/koper €10.<br>
-    <em>Koper</em> mag enkel met manager- of hoger goedkeuring.</p>
+    <em>Plastic, glas en koper</em> mag enkel met manager- of hoger goedkeuring.</p>
 
     <div class="grid" role="table" aria-label="Aankoop materialen">
       <div class="head">Item</div>
@@ -131,21 +131,31 @@
       <!-- €10 -->
       <div class="row">
         <div>
-          <label for="plastic">Plastic</label>
+          <label for="glas">Glas <span class="hint">(alleen met manager-goedkeuring)</span></label>
           <div class="price">€10 / stuk</div>
+          <label class="switch">
+            <input type="checkbox" id="approve-glas">
+            <span>Manager-goedkeuring voor glas</span>
+          </label>
         </div>
-        <div><input id="plastic" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
-        <div class="sub right">€<span id="sub-plastic">0,00</span></div>
-      </div>
-
-      <div class="row">
-        <div>
-          <label for="glas">Glas</label>
-          <div class="price">€10 / stuk</div>
-        </div>
-        <div><input id="glas" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*"></div>
+        <div><input id="glas" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*" disabled aria-describedby="glas-note"></div>
         <div class="sub right">€<span id="sub-glas">0,00</span></div>
       </div>
+    </div>
+
+    <div class="row">
+        <div>
+          <label for="plastic">Plastic <span class="hint">(alleen met manager-goedkeuring)</span></label>
+          <div class="price">€10 / stuk</div>
+          <label class="switch">
+            <input type="checkbox" id="approve-plastic">
+            <span>Manager-goedkeuring voor plastic</span>
+          </label>
+        </div>
+        <div><input id="plastic" type="number" min="0" step="1" value="0" inputmode="numeric" pattern="[0-9]*" disabled aria-describedby="plastic-note"></div>
+        <div class="sub right">€<span id="sub-plastic">0,00</span></div>
+      </div>
+    </div>
 
       <div class="row">
         <div>
@@ -296,13 +306,29 @@
     aankoop: {
       "ijzer": 20, "staal": 20,
       "aluminium": 25, "carparts": 25, "metaalschroot": 25, "rubber": 25,
-      "plastic": 10, "glas": 10, "koper": 10 // koper apart geregeld met approval
+      "plastic": 10, "glas": 10, "koper": 10 // apart geregeld met approval
     },
     recycling: {
       "versleten-fietsbanden": 10, "lege-blikjes": 10, "gebroken-telefoons": 10, "gebroken-radios": 10
     }
   };
 
+  // Glas-approval toggle
+  const approveGlas = document.getElementById('approve-glas');
+  const glasInput   = document.getElementById('glas');
+  approveGlas.addEventListener('change', () => {
+    glasInput.disabled = !approveGlas.checked;
+    if (!approveGlas.checked) { glasInput.value = 0; document.getElementById('sub-glas').textContent = "0,00"; }
+  });
+  
+  // Plastic-approval toggle
+  const approvePlastic = document.getElementById('approve-plastic');
+  const plasticInput   = document.getElementById('plastic');
+  approvePlastic.addEventListener('change', () => {
+    plasticInput.disabled = !approvePlastic.checked;
+    if (!approvePlastic.checked) { plasticInput.value = 0; document.getElementById('sub-plastic').textContent = "0,00"; }
+  });
+  
   // Koper-approval toggle
   const approveKoper = document.getElementById('approve-koper');
   const koperInput   = document.getElementById('koper');
@@ -321,9 +347,9 @@
       const input = document.getElementById(id);
       if (!input) continue;
 
-      // Als koper niet is goedgekeurd, telt het niet mee (en is disabled)
-      if (id === "koper" && koperInput.disabled) {
-        document.getElementById('sub-koper').textContent = "0,00";
+      // Als plastic, glas en koper niet is goedgekeurd, telt het niet mee (en is disabled)
+      if (["plastic", "glas", "koper"].includes(id) && approveExtra.checked === false) {
+        document.getElementById(`sub-${id}`).textContent = "0,00";
         continue;
       }
 
