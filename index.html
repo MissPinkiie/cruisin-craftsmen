@@ -197,8 +197,8 @@ const LABELS = {
   aluminium: "Aluminium",
   carparts: "Car parts",
   craftparts: "Craft parts",
-  metaalschroot: "Metaalschroot",
   elektronischschroot: "Elektronisch schroot",
+  metaalschroot: "Metaalschroot",
   rubber: "Rubber",
   plastic: "Plastic",
   glas: "Glas",
@@ -226,7 +226,10 @@ approveExtra.addEventListener('change',()=>{
   restrictedIds.forEach(id=>{
     const input=document.getElementById(id);
     input.disabled=!approveExtra.checked;
-    if(!approveExtra.checked){input.value=0; document.getElementById(`sub-${id}`).textContent="0";}
+    if(!approveExtra.checked){
+      input.value=0;
+      document.getElementById(`sub-${id}`).textContent="0";
+    }
   });
 });
 
@@ -275,12 +278,25 @@ document.getElementById('btn-aankoop').onclick=()=>{
   document.getElementById('res-aankoop').hidden=false;
   updateTotal();
 };
+
 document.getElementById('btn-reset-aankoop').onclick=()=>{
   Object.keys(PRICES.aankoop).forEach(id=>{
-    const input=document.getElementById(id); if(input){input.value=0; document.getElementById(`sub-${id}`).textContent="0";}
+    const input=document.getElementById(id);
+    if(input){
+      input.value=0;
+      document.getElementById(`sub-${id}`).textContent="0";
+    }
   });
-  approveExtra.checked=false; restrictedIds.forEach(id=>document.getElementById(id).disabled=true);
-  document.getElementById('res-aankoop').hidden=true; updateTotal();
+  approveExtra.checked=false;
+  restrictedIds.forEach(id=>document.getElementById(id).disabled=true);
+
+  // sectie-samenvatting leegmaken
+  document.getElementById('sum-aankoop').textContent = "0";
+  document.getElementById('cnt-aankoop').textContent = "0";
+  document.getElementById('rows-aankoop').innerHTML = "";
+  document.getElementById('res-aankoop').hidden = true;
+
+  updateTotal();
 };
 
 // Recycling
@@ -292,11 +308,23 @@ document.getElementById('btn-recycling').onclick=()=>{
   document.getElementById('res-recycling').hidden=false;
   updateTotal();
 };
+
 document.getElementById('btn-reset-recycling').onclick=()=>{
   Object.keys(PRICES.recycling).forEach(id=>{
-    const input=document.getElementById(id); if(input){input.value=0; document.getElementById(`sub-${id}`).textContent="0";}
+    const input=document.getElementById(id);
+    if(input){
+      input.value=0;
+      document.getElementById(`sub-${id}`).textContent="0";
+    }
   });
-  document.getElementById('res-recycling').hidden=true; updateTotal();
+
+  // sectie-samenvatting leegmaken
+  document.getElementById('sum-recycling').textContent = "0";
+  document.getElementById('cnt-recycling').textContent = "0";
+  document.getElementById('rows-recycling').innerHTML = "";
+  document.getElementById('res-recycling').hidden = true;
+
+  updateTotal();
 };
 
 // totaal
@@ -390,10 +418,11 @@ document.getElementById('btn-copy-total').onclick = () => {
   });
 };
 </script>
-  <footer style="text-align:center; margin:2rem 0; font-size:0.8rem; color:#ccc; border-top:1px solid #444; padding-top:1rem;">
+
+<footer style="text-align:center; margin:2rem 0; font-size:0.8rem; color:#ccc; border-top:1px solid #444; padding-top:1rem;">
   <p>🔧 Deze berekentool is gemaakt voor de <b>Eldorado RP</b> FiveM server.</p>
   <p>💻 Ontwikkeling & HTML door ChatGPT samen met de Cruisin Craftsmen crew 🚗</p>
 </footer>
+
 </body>
-  
 </html>
