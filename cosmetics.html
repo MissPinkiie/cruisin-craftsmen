@@ -32,6 +32,8 @@
   td.cat { color:#e7e7e7; white-space:nowrap; }
   footer { text-align:center; margin:2rem 0; font-size:.8rem; color:#ccc; border-top:1px solid var(--border); padding-top:1rem; }
   pre.example { white-space:pre-wrap; background:#1e1e1e; border:1px solid var(--border); border-radius:8px; padding:.6rem; }
+  a.back-btn { display:inline-block; margin-top: 1rem; padding: .6rem 1rem; border-radius: 8px; text-decoration: none; background: #444; color: #FEFEF3; font-weight: 700;}
+  a.back-btn:hover { background: #555;}
 </style>
 </head>
 <body>
@@ -184,8 +186,10 @@ document.getElementById('btn-copy').onclick = async () => {
 };
 </script>
 
-<footer>
-  🔧 Cosmetics formatter gemaakt voor <b>Eldorado RP</b> – Cruisin Craftsmen 🚗
+<footer style="text-align:center; margin:2rem 0; font-size:0.8rem; color:#ccc; border-top:1px solid #444; padding-top:1rem;">
+  <p>🔧 Deze tool is gemaakt voor de <b>Eldorado RP</b> FiveM server.</p>
+  <p>💻 Ontwikkeling & HTML door ChatGPT samen met de Cruisin Craftsmen crew 🚗</p>
+  <p><a href="index.html" class="back-btn">⬅️ Terug naar startpagina</a></p>
 </footer>
 </body>
 </html>
