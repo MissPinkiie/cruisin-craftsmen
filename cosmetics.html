@@ -1,71 +1,59 @@
 <!doctype html>
 <html lang="nl">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Cosmetics formatter • Cruisin Craftsmen</title>
-<style>
-  :root {
-    --bg:#1e1e1e; --card:#2a2a2a; --border:#444; --ink:#FEFEF3;
-    --muted:#bbb; --accent:#A82B2D; --accent-2:#444; --ok:#ffcc00;
-  }
-  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; background:var(--bg); color:var(--ink); }
-  header { text-align:center; padding:2rem 1rem 1rem; }
-  header img { max-width:380px; height:auto; }
-  header h1 { margin:.5rem 0 0; font-size:1.6rem; }
-  .wrap { max-width:960px; margin:0 auto; padding:1rem; }
-  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1rem; margin-top:1rem; }
-  .small { font-size:.9rem; color:var(--muted); }
-  textarea { width:100%; min-height:160px; background:#333; color:var(--ink); border:1px solid #555; border-radius:8px; padding:.7rem; }
-  .row { display:flex; gap:.6rem; flex-wrap:wrap; margin:.8rem 0; }
-  button { cursor:pointer; border:none; border-radius:8px; padding:.6rem 1rem; font-weight:700; }
-  .primary { background:var(--accent); color:var(--ink); }
-  .primary:hover { filter:brightness(.95); }
-  .ghost { background:var(--accent-2); color:var(--ink); }
-  .ghost:hover { filter:brightness(1.1); }
-  .fade { opacity:0; transition:opacity .3s ease; margin-left:.5rem; color:var(--ok); }
-  .fade.show { opacity:1; }
-  table { width:100%; border-collapse:collapse; margin-top:.6rem; }
-  th, td { border:1px solid #555; padding:.5rem .6rem; vertical-align:top; }
-  th { background:#333; text-align:left; }
-  td.value { color:var(--ink); }
-  td.cat { color:#e7e7e7; white-space:nowrap; }
-  footer { text-align:center; margin:2rem 0; font-size:.8rem; color:#ccc; border-top:1px solid var(--border); padding-top:1rem; }
-  pre.example { white-space:pre-wrap; background:#1e1e1e; border:1px solid var(--border); border-radius:8px; padding:.6rem; }
-  a.back-btn { display:inline-block; margin-top: 1rem; padding: .6rem 1rem; border-radius: 8px; text-decoration: none; background: #444; color: #FEFEF3; font-weight: 700;}
-  a.back-btn:hover { background: #555;}
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Cosmetics Tool • Cruisin Craftsmen</title>
+  <style>
+    body { margin:0; font-family:system-ui,sans-serif; background:#1e1e1e; color:#FEFEF3; }
+    header { text-align:center; padding:2rem 1rem 1rem; }
+    header img { max-width:280px; height:auto; }
+    h1 { font-size:1.6rem; margin:.8rem 0 2rem; }
+    .wrap { max-width:960px; margin:0 auto; padding:1rem; }
+    .card { background:#2a2a2a; border:1px solid #444; border-radius:12px; padding:1rem; margin-top:1rem; }
+    table { width:100%; border-collapse:collapse; margin-top:1rem; font-size:.9rem; }
+    th, td { border:1px solid #555; padding:.5rem; }
+    th { background:#333; color:#FEFEF3; text-align:left; }
+    td { color:#FEFEF3; }
+    .right { text-align:right; }
+    footer { text-align:center; margin:2rem 0; font-size:0.8rem; color:#ccc; border-top:1px solid #444; padding-top:1rem; }
+    a.back-btn {
+      display:inline-block;
+      margin-top: 1rem;
+      padding: .6rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      background: #444;
+      color: #FEFEF3;
+      font-weight: 700;
+    }
+    a.back-btn:hover { background:#555; }
+  </style>
 </head>
 <body>
-<header>
-  <img src="logo.png" alt="Cruisin Craftsmen">
-  <h1>Cosmetics – Tekst → Overzicht</h1>
-</header>
+  <header>
+    <img src="logo.png" alt="Cruisin Craftsmen">
+    <h1>Cosmetics overzicht</h1>
+    <p>Plak hier de cosmetica tekst en zet om naar een mooi overzicht.</p>
+  </header>
 
-<div class="wrap">
-  <div class="card">
-    <p class="small">Plak hieronder de ruwe regel (bijv. <em>Uitlaten - [ 8. Alt. Titanium Tuner Exhaust ],Rolkooien - [ 1. Roll Cage ... ]</em>)</p>
-    <textarea id="raw" placeholder="Plak hier je tekst..."></textarea>
-    <div class="row">
-      <button class="primary" id="btn-parse">Zet om naar tabel</button>
-      <button class="ghost" id="btn-copy">📋 Kopieer tabel als tekst</button>
-      <span id="copied" class="fade">Gekopieerd!</span>
-    </div>
-    <div id="stats" class="small"></div>
-    <div id="out" class="table-wrap"></div>
+  <div class="wrap">
+    <section class="card">
+      <textarea id="input" rows="6" style="width:100%; background:#333; color:#FEFEF3; border:1px solid #555; border-radius:6px; padding:.6rem;" placeholder="Plak hier de cosmetica tekst..."></textarea>
+      <button id="convert" style="margin-top:1rem; padding:.6rem 1rem; border:none; border-radius:8px; font-weight:700; background:#A82B2D; color:#FEFEF3; cursor:pointer;">Zet om naar tabel</button>
+      <div id="output"></div>
+    </section>
   </div>
 
-  <div class="card">
-    <h3>Voorbeeld input</h3>
-    <pre class="example small">
-Uitlaten - [ 8. Alt. Titanium Tuner Exhaust ],Rolkooien - [ 1. Roll Cage and Chassis Upgrade ],Motorkappen - [ 2. Smooth Hood ],Dak - [ 1. Roof Spoiler ],Rechter spatbord - [ 1. Custom Eyebrows ],Spoilers - [ 9. Drift Wing ],Voorbumpers - [ 12. Track Bumper ],Primair - [ Black (Metallic) ],Secundair - [ Black (Metallic) ],Parelmoer - [ Torino Red (Metallic) ],Velg - [ Black (Metallic) ],Dashboard - [ Black (Metallic) ],Interieur - [ Red (Metallic) ],Wheels - [ Venum (16) (Sport) ],Borden - [ Blauw op wit #1 ]
-    </pre>
-  </div>
-</div>
+  <footer>
+    <p>🔧 Deze tool is gemaakt voor de <b>Eldorado RP</b> FiveM server.</p>
+    <p>💻 Ontwikkeling & HTML door ChatGPT samen met de Cruisin Craftsmen crew 🚗</p>
+    <p><a href="index.html" class="back-btn">⬅️ Terug naar startpagina</a></p>
+  </footer>
 
-<script>
-/* ========== CATEGORIEËN ========== */
-const CATEGORIES = {
+  <script>
+  /* ========== CATEGORIEËN ========== */
+  const CATEGORIES = {
   /* ---------- Uitlaat ---------- */
   "Uitlaten": "Uitlaat",
 
@@ -94,102 +82,36 @@ const CATEGORIES = {
   "Borden": "Aangepast kentekenplaat"
 };
 
-/* ========== PARSER ========== */
-// splits top-level op komma's, negeert komma's binnen [...]
-function splitTopLevel(input) {
-  const out = [];
-  let buf = '', depth = 0;
-  for (let i = 0; i < input.length; i++) {
-    const ch = input[i];
-    if (ch === '[') depth++;
-    if (ch === ']') depth = Math.max(0, depth - 1);
-    if (ch === ',' && depth === 0) { out.push(buf); buf = ''; }
-    else { buf += ch; }
-  }
-  if (buf.trim()) out.push(buf);
-  return out.map(s => s.trim()).filter(Boolean);
-}
+document.getElementById('convert').onclick = () => {
+    const input = document.getElementById('input').value.trim();
+    if (!input) return;
 
-function parseEntry(entry) {
-  const sep = entry.indexOf(' - ');
-  let key, val;
-  if (sep !== -1) {
-    key = entry.slice(0, sep).trim();
-    val = entry.slice(sep + 3).trim();
-  } else {
-    key = entry.trim(); val = '';
-  }
-  if (val.startsWith('[') && val.endsWith(']')) val = val.slice(1, -1).trim();
-  key = key.replace(/\s+/g, ' ').trim();
-  val = val.replace(/\s+/g, ' ').trim();
-  return { key, val };
-}
+    const pairs = input.split(",").map(part => part.trim());
+    let rows = "";
 
-function escapeHtml(s) {
-  return String(s)
-    .replaceAll('&','&amp;').replaceAll('<','&lt;')
-    .replaceAll('>','&gt;').replaceAll('"','&quot;')
-    .replaceAll("'",'&#039;');
-}
+    pairs.forEach(pair => {
+      const [key, value] = pair.split("-").map(s => s.trim());
+      if (!key || !value) return;
 
-function toPlainText(pairs) {
-  return pairs.map(({key,val}) => `• ${key}: ${val || '-'}`).join('\n');
-}
+      const cleanKey = key.replace(/\[|\]/g, "").trim();
+      const cleanVal = value.replace(/\[|\]/g, "").trim();
+      const category = CATEGORY_MAP[cleanKey] || "Nog te bepalen";
 
-/* ========== RENDER ========== */
-function renderTable(pairs) {
-  if (!pairs.length) return '<p class="small">Geen geldige items gevonden.</p>';
-  const rows = pairs.map(({key, val}) => {
-    const cat = CATEGORIES[key] || 'Nog te bepalen';
-    return `<tr>
-      <td>${escapeHtml(key)}</td>
-      <td class="value">${escapeHtml(val || '—')}</td>
-      <td class="cat">${escapeHtml(cat)}</td>
-    </tr>`;
-  }).join('');
-  return `<table>
-    <thead>
-      <tr><th>Onderdeel</th><th>Gekozen optie</th><th>Categorie</th></tr>
-    </thead>
-    <tbody>${rows}</tbody>
-  </table>`;
-}
+      rows += `<tr>
+        <td>${cleanKey}</td>
+        <td>${cleanVal}</td>
+        <td>${category}</td>
+      </tr>`;
+    });
 
-/* ========== UI ========== */
-const raw = document.getElementById('raw');
-const out = document.getElementById('out');
-const stats = document.getElementById('stats');
-const copied = document.getElementById('copied');
-
-document.getElementById('btn-parse').onclick = () => {
-  const text = raw.value.trim();
-  if (!text) { out.innerHTML = '<p class="small">Plak eerst je tekst hierboven.</p>'; stats.textContent=''; return; }
-  const chunks = splitTopLevel(text);
-  const pairs = chunks.map(parseEntry).filter(p => p.key);
-  out.innerHTML = renderTable(pairs);
-  stats.innerHTML = `Gevonden items: <b>${pairs.length}</b>`;
-};
-
-document.getElementById('btn-copy').onclick = async () => {
-  const text = raw.value.trim();
-  if (!text) return;
-  const chunks = splitTopLevel(text);
-  const pairs = chunks.map(parseEntry).filter(p => p.key);
-  const clip = toPlainText(pairs);
-  try {
-    await navigator.clipboard.writeText(clip);
-    copied.classList.add('show');
-    setTimeout(()=>copied.classList.remove('show'), 1200);
-  } catch(e) {
-    alert('Kopiëren mislukt. (Browser-permissie?)');
-  }
-};
-</script>
-
-<footer style="text-align:center; margin:2rem 0; font-size:0.8rem; color:#ccc; border-top:1px solid #444; padding-top:1rem;">
-  <p>🔧 Deze tool is gemaakt voor de <b>Eldorado RP</b> FiveM server.</p>
-  <p>💻 Ontwikkeling & HTML door ChatGPT samen met de Cruisin Craftsmen crew 🚗</p>
-  <p><a href="index.html" class="back-btn">⬅️ Terug naar startpagina</a></p>
-</footer>
+    document.getElementById('output').innerHTML = `
+      <table>
+        <thead>
+          <tr><th>Onderdeel</th><th>Optie</th><th>Categorie</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  };
+  </script>
 </body>
 </html>
