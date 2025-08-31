@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Formatter – Auto opties naar overzicht</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin:0; background:#1e1e1e; color:#FEFEF3;}
+  .wrap { max-width: 960px; margin: 0 auto; padding: 1rem; }
+  h1 { font-size: 1.4rem; margin: 1rem 0; }
+  .card { background:#2a2a2a; border:1px solid #444; border-radius:12px; padding:1rem; margin-top:1rem; }
+  textarea { width:100%; min-height:160px; background:#333; color:#FEFEF3; border:1px solid #555; border-radius:8px; padding:.7rem; }
+  .row { display:flex; gap:.5rem; flex-wrap:wrap; margin:.7rem 0; }
+  button { cursor:pointer; border:none; border-radius:8px; padding:.6rem 1rem; font-weight:700; }
+  .primary { background:#A82B2D; color:#FEFEF3; }
+  .ghost { background:#444; color:#FEFEF3; }
+  .small { font-size:.85rem; opacity:.85; }
+  table { width:100%; border-collapse:collapse; margin-top:1rem; }
+  th, td { border:1px solid #555; padding:.5rem .6rem; }
+  th { background:#333; text-align:left; }
+  td.value { color:#FEFEF3; }
+  .right { text-align:right; }
+  .pill { display:inline-block; margin-left:.5rem; font-size:.85rem; color:#bbb; }
+  .fade { opacity:0; transition:opacity .3s ease; margin-left:.5rem; color:#ffcc00; }
+  .fade.show { opacity:1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Formatter – onderdelen naar overzicht</h1>
+  <div class="card">
+    <p class="small">Plak hier je tekst (bijv. <em>Uitlaten - [ 8. Alt. Titanium Tuner Exhaust ],Rolkooien - [ 1. Roll Cage ... ]</em>)</p>
+    <textarea id="raw"></textarea>
+    <div class="row">
+      <button class="primary" id="btn-parse">Zet om naar tabel</button>
+      <button class="ghost" id="btn-copy">📋 Kopieer tabel als tekst</button>
+      <span id="copied" class="fade">Gekopieerd!</span>
+    </div>
+    <div id="stats" class="small"></div>
+    <div id="out"></div>
+  </div>
+
+  <div class="card">
+    <h3>Voorbeeld input</h3>
+    <pre class="small" style="white-space:pre-wrap; background:#1e1e1e; border:1px solid #444; border-radius:8px; padding:.6rem;">
+Uitlaten - [ 8. Alt. Titanium Tuner Exhaust ],Rolkooien - [ 1. Roll Cage and Chassis Upgrade ],Motorkappen - [ 2. Smooth Hood ],Dak - [ 1. Roof Spoiler ],Rechter spatbord - [ 1. Custom Eyebrows ],Spoilers - [ 9. Drift Wing ],Voorbumpers - [ 12. Track Bumper ],Primair - [ Black (Metallic) ],Secundair - [ Black (Metallic) ],Parelmoer - [ Torino Red (Metallic) ],Velg - [ Black (Metallic) ],Dashboard - [ Black (Metallic) ],Interieur - [ Red (Metallic) ],Wheels - [ Venum (16) (Sport) ],Borden - [ Blauw op wit #1 ]
+    </pre>
+  </div>
+</div>
+
+<script>
+/**
+ * Parser die entries splitst op komma's die NIET binnen [] staan.
+ * Vorm: Label - [ waarde ]
+ */
+function splitTopLevel(input) {
+  const out = [];
+  let buf = '', depth = 0;
+  for (let i = 0; i < input.length; i++) {
+    const ch = input[i];
+    if (ch === '[') depth++;
+    if (ch === ']') depth = Math.max(0, depth - 1);
+    if (ch === ',' && depth === 0) {
+      out.push(buf);
+      buf = '';
+    } else {
+      buf += ch;
+    }
+  }
+  if (buf.trim()) out.push(buf);
+  return out.map(s => s.trim()).filter(Boolean);
+}
+
+function parseEntry(entry) {
+  // knip op eerste ' - '
+  const sep = entry.indexOf(' - ');
+  let key, val;
+  if (sep !== -1) {
+    key = entry.slice(0, sep).trim();
+    val = entry.slice(sep + 3).trim();
+  } else {
+    // fallback: probeer bracketgedeelte te vinden
+    key = entry.trim();
+    val = '';
+  }
+  // strip buitenste [] als aanwezig
+  if (val.startsWith('[') && val.endsWith(']')) {
+    val = val.slice(1, -1).trim();
+  }
+  // normaliseer extra spaties
+  key = key.replace(/\s+/g, ' ').trim();
+  val = val.replace(/\s+/g, ' ').trim();
+  return { key, val };
+}
+
+function renderTable(pairs) {
+  if (!pairs.length) return '<p class="small">Geen geldige items gevonden.</p>';
+  let rows = pairs.map(({key, val}) => 
+    `<tr><td>${escapeHtml(key)}</td><td class="value">${escapeHtml(val || '—')}</td></tr>`).join('');
+  return `<table>
+    <thead><tr><th>Onderdeel</th><th>Gekozen optie</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
+function toPlainText(pairs) {
+  // Net tekstblok, makkelijk te plakken in Discord/notes
+  return pairs.map(({key,val}) => `• ${key}: ${val || '-'}`).join('\n');
+}
+
+// UI handlers
+const raw = document.getElementById('raw');
+const out = document.getElementById('out');
+const stats = document.getElementById('stats');
+const copied = document.getElementById('copied');
+
+document.getElementById('btn-parse').onclick = () => {
+  const text = raw.value.trim();
+  if (!text) { out.innerHTML = '<p class="small">Plak eerst je tekst hierboven.</p>'; stats.textContent=''; return; }
+
+  const chunks = splitTopLevel(text);
+  const pairs = chunks.map(parseEntry).filter(p => p.key);
+  out.innerHTML = renderTable(pairs);
+  stats.innerHTML = `Gevonden items: <b>${pairs.length}</b><span class="pill">(${new Date().toLocaleTimeString()})</span>`;
+};
+
+document.getElementById('btn-copy').onclick = async () => {
+  const text = raw.value.trim();
+  if (!text) return;
+  const chunks = splitTopLevel(text);
+  const pairs = chunks.map(parseEntry).filter(p => p.key);
+  const clip = toPlainText(pairs);
+  try {
+    await navigator.clipboard.writeText(clip);
+    copied.classList.add('show');
+    setTimeout(()=>copied.classList.remove('show'), 1200);
+  } catch(e) {
+    alert('Kopiëren mislukt. (Browser-permissie?)');
+  }
+};
+</script>
+</body>
+</html>
