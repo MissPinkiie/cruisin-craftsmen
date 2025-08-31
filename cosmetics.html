@@ -15,32 +15,50 @@
     th, td { border:1px solid #555; padding:.5rem; }
     th { background:#333; color:#FEFEF3; text-align:left; }
     td { color:#FEFEF3; }
-    .right { text-align:right; }
+    .row { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.8rem; }
+    button { cursor:pointer; border:none; border-radius:8px; padding:.6rem 1rem; font-weight:700; }
+    .primary { background:#A82B2D; color:#FEFEF3; }
+    .ghost { background:#444; color:#FEFEF3; }
+    .totals { display:flex; gap:1rem; flex-wrap:wrap; margin-top:1rem; }
+    .pill { flex:1; min-width:180px; background:#333; border:1px solid #555; border-radius:8px; padding:.6rem; }
+    .pill .label { font-size:.85rem; color:#bbb; }
+    .pill .value { font-size:1.2rem; font-weight:700; }
     footer { text-align:center; margin:2rem 0; font-size:0.8rem; color:#ccc; border-top:1px solid #444; padding-top:1rem; }
     a.back-btn {
-      display:inline-block;
-      margin-top: 1rem;
-      padding: .6rem 1rem;
-      border-radius: 8px;
-      text-decoration: none;
-      background: #444;
-      color: #FEFEF3;
-      font-weight: 700;
+      display:inline-block; margin-top:1rem; padding:.6rem 1rem; border-radius:8px;
+      text-decoration:none; background:#444; color:#FEFEF3; font-weight:700;
     }
     a.back-btn:hover { background:#555; }
+    textarea { width:100%; min-height:160px; background:#333; color:#FEFEF3; border:1px solid #555; border-radius:6px; padding:.6rem; }
   </style>
 </head>
 <body>
   <header>
     <img src="logo.png" alt="Cruisin Craftsmen">
     <h1>Cosmetics overzicht</h1>
-    <p>Plak hier de cosmetica tekst en zet om naar een mooi overzicht.</p>
+    <p>Plak hieronder de cosmetica-tekst en zet om naar een duidelijk overzicht.</p>
   </header>
 
   <div class="wrap">
     <section class="card">
-      <textarea id="input" rows="6" style="width:100%; background:#333; color:#FEFEF3; border:1px solid #555; border-radius:6px; padding:.6rem;" placeholder="Plak hier de cosmetica tekst..."></textarea>
-      <button id="convert" style="margin-top:1rem; padding:.6rem 1rem; border:none; border-radius:8px; font-weight:700; background:#A82B2D; color:#FEFEF3; cursor:pointer;">Zet om naar tabel</button>
+      <textarea id="input" placeholder="Plak hier de cosmetica tekst..."></textarea>
+
+      <div class="row">
+        <button id="convert" class="primary">Zet om naar tabel</button>
+        <button id="reset" class="ghost">Reset</button>
+      </div>
+
+      <div class="totals">
+        <div class="pill">
+          <div class="label">Aantal items</div>
+          <div class="value"><span id="count">0</span></div>
+        </div>
+        <div class="pill">
+          <div class="label">Totaal (aantal × €400)</div>
+          <div class="value">€ <span id="total">0</span></div>
+        </div>
+      </div>
+
       <div id="output"></div>
     </section>
   </div>
@@ -52,65 +70,119 @@
   </footer>
 
   <script>
+  // Format euro zonder decimalen (nl-NL scheiding met punten)
+  const euro = n => (n||0).toLocaleString('nl-NL',{minimumFractionDigits:0, maximumFractionDigits:0});
+
   /* ========== CATEGORIEËN ========== */
   const CATEGORIES = {
-  /* ---------- Uitlaat ---------- */
-  "Uitlaten": "Uitlaat",
+    /* ---------- Uitlaat ---------- */
+    "Uitlaten": "Uitlaat",
 
-  /* ---------- Rollcage / Chassis ---------- */
-  "Rolkooien": "Rollcage",
+    /* ---------- Rollcage / Chassis ---------- */
+    "Rolkooien": "Rollcage",
 
-  /* ---------- Carrosserie / Exterior ---------- */
-  "Motorkappen": "Buiten Cosmetica",
-  "Dak": "Voertuig Dak",
-  "Rechter spatbord": "Skirts",
-  "Spoilers": "Spoiler",
-  "Voorbumpers": "Bumper",
+    /* ---------- Carrosserie / Exterior ---------- */
+    "Motorkappen": "Buiten Cosmetica",
+    "Dak": "Voertuig Dak",
+    "Rechter spatbord": "Skirts",
+    "Spoilers": "Spoiler",
+    "Voorbumpers": "Bumper",
 
-  /* ---------- Spuitbussen / Kleuren ---------- */
-  "Primair": "Spuitbussen",
-  "Secundair": "Spuitbussen",
-  "Parelmoer": "Spuitbussen",
-  "Velg": "Spuitbussen",
-  "Dashboard": "Spuitbussen",
-  "Interieur": "Spuitbussen",
+    /* ---------- Spuitbussen / Kleuren ---------- */
+    "Primair": "Spuitbussen",
+    "Secundair": "Spuitbussen",
+    "Parelmoer": "Spuitbussen",
+    "Velg": "Spuitbussen",
+    "Dashboard": "Spuitbussen",
+    "Interieur": "Spuitbussen",
 
-  /* ---------- Wielen ---------- */
-  "Wheels": "Custom Velgen",
+    /* ---------- Wielen ---------- */
+    "Wheels": "Custom Velgen",
 
-  /* ---------- Nummerplaten ---------- */
-  "Borden": "Aangepast kentekenplaat"
-};
+    /* ---------- Nummerplaten ---------- */
+    "Borden": "Aangepast kentekenplaat"
+  };
 
-document.getElementById('convert').onclick = () => {
+  // Split op komma's die NIET binnen [ ] staan
+  function splitTopLevel(input) {
+    const out = [];
+    let buf = '', depth = 0;
+    for (let i = 0; i < input.length; i++) {
+      const ch = input[i];
+      if (ch === '[') depth++;
+      if (ch === ']') depth = Math.max(0, depth - 1);
+      if (ch === ',' && depth === 0) { out.push(buf); buf = ''; }
+      else { buf += ch; }
+    }
+    if (buf.trim()) out.push(buf);
+    return out.map(s => s.trim()).filter(Boolean);
+  }
+
+  function parseEntry(entry) {
+    const sep = entry.indexOf(' - ');
+    if (sep === -1) return null;
+    let key = entry.slice(0, sep).trim();
+    let val = entry.slice(sep + 3).trim();
+    if (val.startsWith('[') && val.endsWith(']')) val = val.slice(1, -1).trim();
+    key = key.replace(/\s+/g, ' ').trim();
+    val = val.replace(/\s+/g, ' ').trim();
+    return { key, val };
+  }
+
+  function renderTable(rows) {
+    if (!rows.length) return '<p class="small">Geen geldige items gevonden.</p>';
+    const htmlRows = rows.map(({key, val, cat}) => `
+      <tr>
+        <td>${escapeHtml(key)}</td>
+        <td>${escapeHtml(val || '—')}</td>
+        <td>${escapeHtml(cat)}</td>
+      </tr>`).join('');
+    return `<table>
+      <thead><tr><th>Onderdeel</th><th>Optie</th><th>Categorie</th></tr></thead>
+      <tbody>${htmlRows}</tbody>
+    </table>`;
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'",'&#039;');
+  }
+
+  // Convert
+  document.getElementById('convert').onclick = () => {
     const input = document.getElementById('input').value.trim();
     if (!input) return;
 
-    const pairs = input.split(",").map(part => part.trim());
-    let rows = "";
+    const entries = splitTopLevel(input)
+      .map(parseEntry)
+      .filter(Boolean);
 
-    pairs.forEach(pair => {
-      const [key, value] = pair.split("-").map(s => s.trim());
-      if (!key || !value) return;
+    const rows = entries.map(({key, val}) => ({
+      key,
+      val,
+      cat: CATEGORIES[key] || 'Nog te bepalen'
+    }));
 
-      const cleanKey = key.replace(/\[|\]/g, "").trim();
-      const cleanVal = value.replace(/\[|\]/g, "").trim();
-      const category = CATEGORY_MAP[cleanKey] || "Nog te bepalen";
+    // render tabel
+    document.getElementById('output').innerHTML = renderTable(rows);
 
-      rows += `<tr>
-        <td>${cleanKey}</td>
-        <td>${cleanVal}</td>
-        <td>${category}</td>
-      </tr>`;
-    });
+    // aantal & totaal (€400 per item)
+    const count = rows.length;
+    const total = count * 400;
+    document.getElementById('count').textContent = count.toString();
+    document.getElementById('total').textContent = euro(total);
+  };
 
-    document.getElementById('output').innerHTML = `
-      <table>
-        <thead>
-          <tr><th>Onderdeel</th><th>Optie</th><th>Categorie</th></tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>`;
+  // Reset
+  document.getElementById('reset').onclick = () => {
+    document.getElementById('input').value = '';
+    document.getElementById('output').innerHTML = '';
+    document.getElementById('count').textContent = '0';
+    document.getElementById('total').textContent = '0';
   };
   </script>
 </body>
