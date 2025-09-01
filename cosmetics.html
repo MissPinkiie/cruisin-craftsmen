@@ -12,7 +12,7 @@
     .wrap { max-width:960px; margin:0 auto; padding:1rem; }
     .card { background:#2a2a2a; border:1px solid #444; border-radius:12px; padding:1rem; margin-top:1rem; }
     table { width:100%; border-collapse:collapse; margin-top:1rem; font-size:.9rem; }
-    th, td { border:1px solid #555; padding:.5rem; }
+    th, td { border:1px solid #555; padding:.5rem; vertical-align:top; }
     th { background:#333; color:#FEFEF3; text-align:left; }
     td { color:#FEFEF3; }
     .row { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.8rem; }
@@ -20,7 +20,7 @@
     .primary { background:#A82B2D; color:#FEFEF3; }
     .ghost { background:#444; color:#FEFEF3; }
     .totals { display:flex; gap:1rem; flex-wrap:wrap; margin-top:1rem; }
-    .pill { flex:1; min-width:180px; background:#333; border:1px solid #555; border-radius:8px; padding:.6rem; }
+    .pill { flex:1; min-width:200px; background:#333; border:1px solid #555; border-radius:8px; padding:.6rem; }
     .pill .label { font-size:.85rem; color:#bbb; }
     .pill .value { font-size:1.2rem; font-weight:700; }
     footer { text-align:center; margin:2rem 0; font-size:0.8rem; color:#ccc; border-top:1px solid #444; padding-top:1rem; }
@@ -30,6 +30,10 @@
     }
     a.back-btn:hover { background:#555; }
     textarea { width:100%; min-height:160px; background:#333; color:#FEFEF3; border:1px solid #555; border-radius:6px; padding:.6rem; }
+
+    /* checkbox + “gedaan” stijl */
+    .center { text-align:center; }
+    tr.done td { text-decoration: line-through; opacity: .6; }
   </style>
 </head>
 <body>
@@ -56,6 +60,13 @@
         <div class="pill">
           <div class="label">Totaal (aantal × €400)</div>
           <div class="value">€ <span id="total">0</span></div>
+        </div>
+        <div class="pill">
+          <div class="label">Toegepast (× €400)</div>
+          <div class="value">
+            <span id="applied">0</span> / <span id="applied-total">0</span>
+            — € <span id="applied-amount">0</span>
+          </div>
         </div>
       </div>
 
@@ -84,7 +95,6 @@
     /* ---------- Carrosserie / Exterior ---------- */
     "Motorkappen": "Motorkap",
     "Dak": "Voertuigdak",
-    "Rechter spatbord": "Skirts",
     "Spoilers": "Spoiler",
     "Voorbumpers": "Bumper",
     "Afwerking A": "Buitencosmetica",
@@ -97,6 +107,11 @@
     /* ---------- Binnencosmetica ---------- */
     "Stoelen": "Stoel Cosmetics",
     "Stuurwielen": "Interieurcosmetica",
+
+    /* ---------- Rollcage / Chassis ---------- */
+    "Skirts": "Skirts",
+    "Linker spatbord": "Skirts",
+    "Rechter spatbord": "Skirts",
 
     /* ---------- Spuitbussen / Kleuren ---------- */
     "Primair": "Spuitbussen",
@@ -136,24 +151,10 @@
     if (sep === -1) return null;
     let key = entry.slice(0, sep).trim();
     let val = entry.slice(sep + 3).trim();
-    if (val.startsWith('[') && val.endsWith(']')) val = val.slice(1, -1).trim();
+    if (val.startsWith('[') && val.endsWith(']')) val = val.slice(1, - 1).trim();
     key = key.replace(/\s+/g, ' ').trim();
     val = val.replace(/\s+/g, ' ').trim();
     return { key, val };
-  }
-
-  function renderTable(rows) {
-    if (!rows.length) return '<p class="small">Geen geldige items gevonden.</p>';
-    const htmlRows = rows.map(({key, val, cat}) => `
-      <tr>
-        <td>${escapeHtml(key)}</td>
-        <td>${escapeHtml(val || '—')}</td>
-        <td>${escapeHtml(cat)}</td>
-      </tr>`).join('');
-    return `<table>
-      <thead><tr><th>Onderdeel</th><th>Optie</th><th>Categorie</th></tr></thead>
-      <tbody>${htmlRows}</tbody>
-    </table>`;
   }
 
   function escapeHtml(s) {
@@ -163,6 +164,40 @@
       .replaceAll('>','&gt;')
       .replaceAll('"','&quot;')
       .replaceAll("'",'&#039;');
+  }
+
+  function renderTable(rows) {
+    if (!rows.length) return '<p class="small">Geen geldige items gevonden.</p>';
+    const htmlRows = rows.map(({key, val, cat}, idx) => `
+      <tr>
+        <td class="center"><input type="checkbox" class="mark" data-row="${idx}"></td>
+        <td>${escapeHtml(key)}</td>
+        <td>${escapeHtml(val || '—')}</td>
+        <td>${escapeHtml(cat)}</td>
+      </tr>`).join('');
+    return `<table id="cosm-table">
+      <thead><tr>
+        <th class="center">✅</th><th>Onderdeel</th><th>Optie</th><th>Categorie</th>
+      </tr></thead>
+      <tbody>${htmlRows}</tbody>
+    </table>`;
+  }
+
+  function updateAppliedCounts() {
+    const tbody = document.querySelector('#cosm-table tbody');
+    if (!tbody) {
+      document.getElementById('applied').textContent = '0';
+      document.getElementById('applied-total').textContent = '0';
+      document.getElementById('applied-amount').textContent = '0';
+      return;
+    }
+    const total = tbody.querySelectorAll('tr').length;
+    const checked = tbody.querySelectorAll('input.mark:checked').length;
+    const amount = checked * 400;
+
+    document.getElementById('applied').textContent = String(checked);
+    document.getElementById('applied-total').textContent = String(total);
+    document.getElementById('applied-amount').textContent = euro(amount);
   }
 
   // Convert
@@ -188,6 +223,20 @@
     const total = count * 400;
     document.getElementById('count').textContent = count.toString();
     document.getElementById('total').textContent = euro(total);
+
+    // checkbox gedrag (strike-through bij aangevinkt) + teller
+    const tbody = document.querySelector('#cosm-table tbody');
+    tbody.addEventListener('change', (e) => {
+      if (e.target && e.target.classList.contains('mark')) {
+        const tr = e.target.closest('tr');
+        if (!tr) return;
+        tr.classList.toggle('done', e.target.checked);
+        updateAppliedCounts();
+      }
+    });
+
+    // initialiseer teller (0 / N — €0)
+    updateAppliedCounts();
   };
 
   // Reset
@@ -196,6 +245,9 @@
     document.getElementById('output').innerHTML = '';
     document.getElementById('count').textContent = '0';
     document.getElementById('total').textContent = '0';
+    document.getElementById('applied').textContent = '0';
+    document.getElementById('applied-total').textContent = '0';
+    document.getElementById('applied-amount').textContent = '0';
   };
   </script>
 </body>
