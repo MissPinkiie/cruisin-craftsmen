@@ -174,40 +174,37 @@
  function renderTable(rows) {
   if (!rows.length) return '<p class="small">Geen geldige items gevonden.</p>';
 
-  // Groepeer rijen per categorie
-  const grouped = {};
-  rows.forEach(r => {
-    if (!grouped[r.cat]) grouped[r.cat] = [];
-    grouped[r.cat].push(r);
+  // sorteer: eerst categorie, dan onderdeel (key)
+  const sorted = [...rows].sort((a, b) => {
+    const ac = (a.cat || 'Nog te bepalen');
+    const bc = (b.cat || 'Nog te bepalen');
+    const byCat = ac.localeCompare(bc, 'nl', { sensitivity: 'base' });
+    if (byCat !== 0) return byCat;
+    return a.key.localeCompare(b.key, 'nl', { sensitivity: 'base' });
   });
 
-  // Sorteer categorieën alfabetisch
-  const sortedCats = Object.keys(grouped).sort((a, b) => a.localeCompare(b, 'nl'));
+  const body = sorted.map(({ key, val, cat }) => `
+    <tr>
+      <td class="center"><input type="checkbox" class="mark"></td>
+      <td>${escapeHtml(key)}</td>
+      <td>${escapeHtml(val || '—')}</td>
+      <td>${escapeHtml(cat || 'Nog te bepalen')}</td>
+    </tr>
+  `).join('');
 
-  // Bouw de HTML
-  let htmlRows = '';
-  sortedCats.forEach(cat => {
-    // categorie header (optioneel)
-    htmlRows += `<tr><th colspan="3" style="background:#444; text-align:center;">${escapeHtml(cat)}</th></tr>`;
-    
-    // sorteer items binnen categorie alfabetisch
-    grouped[cat].sort((a, b) => a.key.localeCompare(b.key, 'nl'))
-      .forEach(({key, val}) => {
-        htmlRows += `
-          <tr>
-            <td>${escapeHtml(key)}</td>
-            <td>${escapeHtml(val || '—')}</td>
-            <td>${escapeHtml(cat)}</td>
-          </tr>`;
-      });
-  });
-
-  return `<table>
-    <thead><tr><th>Onderdeel</th><th>Optie</th><th>Categorie</th></tr></thead>
-    <tbody>${htmlRows}</tbody>
-  </table>`;
+  return `
+    <table id="cosm-table">
+      <thead>
+        <tr>
+          <th class="center">✅</th>
+          <th>Onderdeel</th>
+          <th>Optie</th>
+          <th>Categorie</th>
+        </tr>
+      </thead>
+      <tbody>${body}</tbody>
+    </table>`;
 }
-
 
   function updateAppliedCounts() {
     const tbody = document.querySelector('#cosm-table tbody');
@@ -242,28 +239,26 @@
     }));
 
     // render tabel
-    document.getElementById('output').innerHTML = renderTable(rows);
+document.getElementById('output').innerHTML = renderTable(rows);
 
-    // aantal & totaal (€400 per item)
-    const count = rows.length;
-    const total = count * 400;
-    document.getElementById('count').textContent = count.toString();
-    document.getElementById('total').textContent = euro(total);
+// aantal & totaal (€400 per item)
+const count = rows.length;
+const total = count * 400;
+document.getElementById('count').textContent = count.toString();
+document.getElementById('total').textContent = euro(total);
 
-    // checkbox gedrag (strike-through bij aangevinkt) + teller
-    const tbody = document.querySelector('#cosm-table tbody');
-    tbody.addEventListener('change', (e) => {
-      if (e.target && e.target.classList.contains('mark')) {
-        const tr = e.target.closest('tr');
-        if (!tr) return;
-        tr.classList.toggle('done', e.target.checked);
-        updateAppliedCounts();
-      }
-    });
-
-    // initialiseer teller (0 / N — €0)
+// checkbox gedrag (strike-through bij aangevinkt) + teller
+const tbody = document.querySelector('#cosm-table tbody');
+tbody.addEventListener('change', (e) => {
+  if (e.target && e.target.classList.contains('mark')) {
+    const tr = e.target.closest('tr');
+    if (tr) tr.classList.toggle('done', e.target.checked);
     updateAppliedCounts();
-  };
+  }
+});
+
+// initialiseer teller (0 / N — €0)
+updateAppliedCounts();
 
   // Reset
   document.getElementById('reset').onclick = () => {
