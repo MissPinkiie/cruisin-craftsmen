@@ -24,8 +24,9 @@
     .primary:hover { filter:brightness(.93); }
     .ghost { background:#444; color:var(--text); }
     .ghost:hover { background:#555; }
-    .totals { display:flex; gap:1rem; flex-wrap:wrap; margin-top:1rem; }
-    .pill { flex:1; min-width:200px; background:#333; border:1px solid var(--muted2); border-radius:8px; padding:.6rem; }
+    .totals { display:flex; gap:1rem; flex-wrap:nowrap; margin-top:1rem; }
+    @media (max-width: 780px){.totals {flex-wrap: wrap;}}
+    .pill { flex:1 1 0; min-width:200px; background:#333; border:1px solid var(--muted2); border-radius:8px; padding:.6rem; }
     .pill .label { font-size:.85rem; color:#bbb; }
     .pill .value { font-size:1.2rem; font-weight:700; }
     footer { text-align:center; margin:2rem 0; font-size:0.85rem; color:#ccc; border-top:1px solid var(--muted); padding-top:1rem; }
@@ -273,6 +274,16 @@ Uitlaten - [ 8. Alt. Titanium Tuner Exhaust ], Koffers - [ 5. Premium Wall of So
     document.getElementById('applied-total').textContent = '0';
     document.getElementById('applied-amount').textContent = '0';
   };
+
+  // Click to toggle
+  document.addEventListener('click', (e) => {
+    const tr = e.target.closest('#cosm-table tbody tr');
+    if (!tr) return;
+    const cb = tr.querySelector('input.mark');
+    if (e.target !== cb) { cb.checked = !cb.checked; tr.classList.toggle('done', cb.checked); updateAppliedCounts(); }
+  });
+
+    
   </script>
 </body>
 </html>
