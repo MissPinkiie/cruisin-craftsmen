@@ -149,18 +149,33 @@ const CATEGORIES_LC = Object.fromEntries(
   Object.entries(CATEGORIES).map(([k, v]) => [k.toLowerCase(), v])
 );
 
-function getCategory(key, val) {
-  // 1) Key-lookup (case-insensitive)
-  const hit = CATEGORIES_LC[key.toLowerCase()];
-  if (hit) return hit;
+// --- OVERRIDES OP BASIS VAN VALUE (Optie-tekst) ---
+// Elke regel heeft een RegExp die op de optie-tekst matcht (case-insensitive).
+// Als er een match is, OVERRIDET dit de standaard categorie.
+const VALUE_OVERRIDES = [
+  // bestaande wens:
+  { test: /(^|\b)fender\s*vents?(\b|$)/i, category: "Buitenkant cosmetica" },
+  { test: /fake\s*fender\s*vents?/i,       category: "Buitenkant cosmetica" },
 
-  // 2) Value-based uitzonderingen
+  // --- voorbeelden/ideetjes om snel uit te breiden ---
+  // { test: /window\s*tints?/i,             category: "Ramentinten" },
+  // { test: /(drift\s*wing|big\s*spoiler)/i, category: "Spoiler" },
+  // { test: /roll\s*cage|chassis\s*upgrade/i,category: "Rollcage" },
+  // { test: /neon|underglow/i,               category: "Buitenkant cosmetica" },
+];
+
+// Haal categorie op met overrides op value; zo’n override wint altijd.
+function getCategory(key, val) {
+  // 1) Probeer eerst overrides op de value (Optie)
   if (val) {
-    const v = val.toLowerCase();
-    if (v.includes("fender vents") || v.includes("fake fender vents")) {
-      return "Buitenkant cosmetica";
+    const v = String(val).toLowerCase();
+    for (const rule of VALUE_OVERRIDES) {
+      if (rule.test.test(v)) return rule.category;
     }
   }
+
+  // 2) Anders de gewone key->categorie mapping
+  if (CATEGORIES[key]) return CATEGORIES[key];
 
   // 3) Fallback
   return "Nog te bepalen";
