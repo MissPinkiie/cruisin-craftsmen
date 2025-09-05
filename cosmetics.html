@@ -96,6 +96,7 @@ const CATEGORIES = {
   "Stuurwielen": "Binnenkant cosmetica",
   "Trim A": "Binnenkant cosmetica",
   "Trim B": "Binnenkant cosmetica",
+  "Deurluidsprekers": "Binnenkant cosmetica",
 
   /* ---------- Buitenkant Cosmetica ---------- */
   "Afwerking A": "Buitenkant cosmetica",
@@ -103,6 +104,8 @@ const CATEGORIES = {
   "Koffers": "Buitenkant cosmetica",
   "Luchtfilters": "Buitenkant cosmetica",
   "Motorblokken": "Buitenkant cosmetica",
+  "Dashboards": "Buitenkant cosmetica",
+  "Motorsteunen": "Buitenkant cosmetica",
 
   /* ---------- Carrosserie / Exterior ---------- */
   "Achterbumpers": "Bumper",
@@ -123,7 +126,7 @@ const CATEGORIES = {
   "Rolkooien": "Rollcage",
 
   /* ---------- Skirts / Spatborden ---------- */
-  "Linker spatbord": "Skirts",
+  "Linker Spatbord": "Skirts",
   "Rechter spatbord": "Skirts",
   "Skirts": "Skirts",
 
@@ -156,6 +159,7 @@ const VALUE_OVERRIDES = [
   // bestaande wens:
   { test: /(^|\b)fender\s*vents?(\b|$)/i, category: "Buitenkant cosmetica" },
   { test: /fake\s*fender\s*vents?/i,       category: "Buitenkant cosmetica" },
+  { test: /iridescent\s*headlight\s*glass?/i, category: "Buitenkant cosmetica"},
 
   // --- voorbeelden/ideetjes om snel uit te breiden ---
   // { test: /window\s*tints?/i,             category: "Ramentinten" },
