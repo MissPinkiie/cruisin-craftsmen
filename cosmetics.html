@@ -89,88 +89,82 @@ Uitlaten - [ 8. Alt. Titanium Tuner Exhaust ], Koffers - [ 5. Premium Wall of So
   const euro = n => (n||0).toLocaleString('nl-NL',{minimumFractionDigits:0, maximumFractionDigits:0});
 
   /* ========== CATEGORIEËN (alfabetisch per groep) ========== */
-  const CATEGORIES = {
-    /* ---------- Binnenkant Cosmetica ---------- */
-    "Stoelen": "Stoel Cosmetics",
-    "Stuurwielen": "Binnenkant cosmetica",
-    "Trim A": "Binnenkant cosmetica",
-    "Trim B": "Binnenkant cosmetica",
+  /* ========== CATEGORIEËN (gekuist) ========== */
+const CATEGORIES = {
+  /* ---------- Binnenkant Cosmetica ---------- */
+  "Stoelen": "Stoel Cosmetics",
+  "Stuurwielen": "Binnenkant cosmetica",
+  "Trim A": "Binnenkant cosmetica",
+  "Trim B": "Binnenkant cosmetica",
 
-    /* ---------- Buitenkant Cosmetica ---------- */
-    "Afwerking A": "Buitenkant cosmetica",
-    "Afwerking B": "Buitenkant cosmetica",
-    "Koffers": "Buitenkant cosmetica",
-    "Luchtfilters": "Buitenkant cosmetica",
-    "Motorblokken": "Buitenkant cosmetica",
-    "Dashboards": "Buitenkant cosmetica",
+  /* ---------- Buitenkant Cosmetica ---------- */
+  "Afwerking A": "Buitenkant cosmetica",
+  "Afwerking B": "Buitenkant cosmetica",
+  "Koffers": "Buitenkant cosmetica",
+  "Luchtfilters": "Buitenkant cosmetica",
+  "Motorblokken": "Buitenkant cosmetica",
 
-    /* ---------- Carrosserie / Exterior ---------- */
-    "Dak": "Voertuigdak",
-    "Motorkappen": "Motorkap",
-    "Achterbumpers": "Bumper",
-    "Roosters": "Bumper",
-    "Spoilers": "Spoiler",
-    "Voorbumpers": "Bumper",
-    "Raam Tints": "Ramentinten",
+  /* ---------- Carrosserie / Exterior ---------- */
+  "Achterbumpers": "Bumper",
+  "Dak": "Voertuigdak",
+  "Motorkappen": "Motorkap",
+  "Roosters": "Bumper",
+  "Spoilers": "Spoiler",
+  "Voorbumpers": "Bumper",
+  "Raam Tints": "Ramentinten",
 
-     /* ---------- Nog Te sorteren ---------- */
-    "Antennes": "Nog te bepalen",
-    "Dashboards": "Nog te bepalen",
-    "Deurluidsprekers": "Nog te bepalen",
-    "Motorsteunen": "Nog te bepalen",
+  /* ---------- Nummerplaten ---------- */
+  "Borden": "Aangepast kentekenplaat",
+  "Kentekenhouder": "Aangepast kentekenplaat",
+  "Vanity kenteken": "Aangepast kentekenplaat",
+  "Platenhouders": "Aangepast kentekenplaat",
 
-    /* ---------- Nummerplaten ---------- */
-    "Borden": "Aangepast kentekenplaat",
-    "Kentekenhouder": "Aangepast kentekenplaat",
-    "Vanity kenteken": "Aangepast kentekenplaat",
-    "Platenhouders": "Aangepast kentekenplaat",
+  /* ---------- Rollcage / Chassis ---------- */
+  "Rolkooien": "Rollcage",
 
-    /* ---------- Rollcage / Chassis ---------- */
-    "Rolkooien": "Rollcage",
+  /* ---------- Skirts / Spatborden ---------- */
+  "Linker spatbord": "Skirts",
+  "Rechter spatbord": "Skirts",
+  "Skirts": "Skirts",
 
-    /* ---------- Skirts / Spatborden ---------- */
-    "Linker Spatbord": "Skirts",
-    "Rechter Spatbord": "Skirts",
-    "Skirts": "Skirts",
+  /* ---------- Spuitbussen / Kleuren ---------- */
+  "Dashboard": "Spuitbussen",
+  "Interieur": "Spuitbussen",
+  "Livery": "Bestickering",
+  "Parelmoer": "Spuitbussen",
+  "Primair": "Spuitbussen",
+  "Secundair": "Spuitbussen",
+  "Velg": "Spuitbussen",
 
-    /* ---------- Spuitbussen / Kleuren ---------- */
-    "Dashboard": "Spuitbussen",
-    "Interieur": "Spuitbussen",
-    "Livery": "Bestickering",
-    "Parelmoer": "Spuitbussen",
-    "Primair": "Spuitbussen",
-    "Secundair": "Spuitbussen",
-    "Velg": "Spuitbussen",
+  /* ---------- Uitlaat ---------- */
+  "Uitlaten": "Uitlaat",
 
-    /* ---------- Uitlaat ---------- */
-    "Uitlaten": "Uitlaat",
+  /* ---------- Wielen ---------- */
+  "Back Wheels": "Custom Velgen",
+  "Wheels": "Custom Velgen"
+};
 
-    /* ---------- Wielen ---------- */
-    "Back Wheels": "Custom Velgen",
-    "Back Wheels": "Custom Velgen",
-    "Wheels": "Custom Velgen"
-  };
+  // Case-insensitive lookup + value-based uitzonderingen
+const CATEGORIES_LC = Object.fromEntries(
+  Object.entries(CATEGORIES).map(([k, v]) => [k.toLowerCase(), v])
+);
 
-  function getCategory(key, val) {
-  // Eerst kijken naar expliciete key mapping
-  if (CATEGORIES[key]) return CATEGORIES[key];
+function getCategory(key, val) {
+  // 1) Key-lookup (case-insensitive)
+  const hit = CATEGORIES_LC[key.toLowerCase()];
+  if (hit) return hit;
 
-  // Extra check op value
+  // 2) Value-based uitzonderingen
   if (val) {
     const v = val.toLowerCase();
-    if (
-      v.includes("fender vents") ||
-      v.includes("fake fender vents")
-    ) {
+    if (v.includes("fender vents") || v.includes("fake fender vents")) {
       return "Buitenkant cosmetica";
     }
   }
 
-  // Als er niks matcht
+  // 3) Fallback
   return "Nog te bepalen";
-  }
-
-
+}
 
   // Split op komma's die NIET binnen [ ] staan
   function splitTopLevel(input) {
