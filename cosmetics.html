@@ -146,8 +146,31 @@ Uitlaten - [ 8. Alt. Titanium Tuner Exhaust ], Koffers - [ 5. Premium Wall of So
     "Uitlaten": "Uitlaat",
 
     /* ---------- Wielen ---------- */
+    "Back Wheels": "Custom Velgen",
+    "Back Wheels": "Custom Velgen",
     "Wheels": "Custom Velgen"
   };
+
+  function getCategory(key, val) {
+  // Eerst kijken naar expliciete key mapping
+  if (CATEGORIES[key]) return CATEGORIES[key];
+
+  // Extra check op value
+  if (val) {
+    const v = val.toLowerCase();
+    if (
+      v.includes("fender vents") ||
+      v.includes("fake fender vents")
+    ) {
+      return "Buitenkant cosmetica";
+    }
+  }
+
+  // Als er niks matcht
+  return "Nog te bepalen";
+  }
+
+
 
   // Split op komma's die NIET binnen [ ] staan
   function splitTopLevel(input) {
@@ -248,8 +271,9 @@ Uitlaten - [ 8. Alt. Titanium Tuner Exhaust ], Koffers - [ 5. Premium Wall of So
     const rows = entries.map(({key, val}) => ({
       key,
       val,
-      cat: CATEGORIES[key] || 'Nog te bepalen'
+      cat: getCategory(key, val)
     }));
+
 
     // render tabel
     document.getElementById('output').innerHTML = renderTable(rows);
