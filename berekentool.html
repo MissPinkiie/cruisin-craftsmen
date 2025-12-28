@@ -75,9 +75,9 @@
       <div><input id="craftparts" type="number" min="0" value="0"></div>
       <div class="sub">€<span id="sub-craftparts">0</span></div>
 
-      <div><label for="elektronischschroot">Elektronisch Schroot</label><div class="price">€25 / stuk</div></div>
+      <!-- <div><label for="elektronischschroot">Elektronisch Schroot</label><div class="price">€10 / stuk</div></div>
       <div><input id="elektronischschroot" type="number" min="0" value="0"></div>
-      <div class="sub">€<span id="sub-elektronischschroot">0</span></div>
+      <div class="sub">€<span id="sub-elektronischschroot">0</span></div> -->
       
       <div><label for="ijzer">Ijzer</label><div class="price">€20 / stuk</div></div>
       <div><input id="ijzer" type="number" min="0" value="0"></div>
@@ -99,6 +99,10 @@
 
       <div><label for="glas">Glas</label><div class="price">€10 / stuk</div></div>
       <div><input id="glas" type="number" min="0" value="0" disabled></div>
+      <div class="sub">€<span id="sub-glas">0</span></div>
+
+      <div><label for="elektronischschroot">Elektronisch Schroot</label><div class="price">€10 / stuk</div></div>
+      <div><input id="elektronischschroot" type="number" min="0" value="0" disabled></div>
       <div class="sub">€<span id="sub-glas">0</span></div>
 
       <div><label for="koper">Koper</label><div class="price">€10 / stuk</div></div>
@@ -216,7 +220,7 @@ const LABELS = {
 const PRICES = {
   aankoop: {
     ijzer:20, staal:20,
-    aluminium:25, carparts:25, metaalschroot:25, rubber:25, craftparts:25, elektronischschroot:25,
+    aluminium:25, carparts:25, metaalschroot:25, rubber:25, craftparts:25, elektronischschroot:10,
     plastic:10, glas:10, koper:10
   },
   recycling: { banden:10, blikjes:10, telefoons:10, radios:10 }
@@ -224,7 +228,7 @@ const PRICES = {
 
 // goedkeuring toggle
 const approveExtra = document.getElementById('approve-extra');
-const restrictedIds = ["plastic","glas","koper"];
+const restrictedIds = ["plastic","glas","koper", "elektronischschroot"];
 approveExtra.addEventListener('change',()=>{
   restrictedIds.forEach(id=>{
     const input=document.getElementById(id);
